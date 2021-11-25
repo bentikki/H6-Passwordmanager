@@ -1,0 +1,71 @@
+﻿<div class="row no-gutters mt-5">
+    <div class="card-container-background mt-md-5 col-12">
+        <div class="row no-gutters">
+            <!-- Text container -->
+            <div class="col-6 card-left-container d-none d-sm-block">
+                <div class="container-bg-image"><div class="container-bg-image-cover"></div></div>
+                <div class="card-text-container">
+                    <div class="card-text-heading">
+                        ZBC-Passwordmanager
+                    </div>
+                    <div class="card-divider"></div>
+                    <div class="card-text-body">
+                        <p>Log ind for at få adgang til dine gemte logininformationer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form container  -->
+            <div class="col-6 card-right-container">
+                <div class="w-100 text-center card-right-heading">
+                    <h2 class="card-right-heading-text">Log ind</h2>
+                </div>
+
+                <div class="col-8 offset-md-2 col-xs-12 mt-md-2 card-right-content-container">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <input type="text" formControlName="username" placeholder="Email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                                <div *ngIf="f.username.errors.required">Email skal udfyldes</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input [type]="passwordShown ? 'text' : 'password'" formControlName="password" placeholder="Password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                <div *ngIf="f.password.errors.required">Password skal udfyldes</div>
+                            </div>
+                        </div>
+                        
+                        <div class="w-100">
+                            <div class="show-password-container text-right">
+                                <app-passwordtoggler 
+                                    [ShowPassword]='passwordShown' 
+                                    (click)="onShowPasswordClick()"></app-passwordtoggler>
+                            </div>
+                        </div>
+    
+    
+                        <!-- Login button -->
+                        <div class="button-container col-12 col-md-10 offset-md-1">
+                            <button [disabled]="loading" class="btn btn-primary btn-block">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Log ind
+                            </button>
+                        </div>
+                        
+                        <div *ngIf="error" class="alert alert-danger mt-3 mb-0 validation-popup">{{error}}</div>
+        
+                    </form>
+                </div>
+
+                <!-- Create user link -->
+                <div class="bottom-link-container">
+                    <a [routerLink]="['/Create']">
+                        Opret bruger
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

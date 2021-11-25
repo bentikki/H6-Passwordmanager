@@ -1,0 +1,112 @@
+.container-bg-image {
+    /* The image used */
+    background-image: url("../../assets/Images/Secondary_Background.jpg");
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    /* Full height */
+    height: 100%; 
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .container-bg-image-cover{
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 85%;
+	    background: linear-gradient(to right, rgb(1, 5, 6) 0%, rgb(4, 38, 48) 100%);
+        height: 100%; 
+        width: 100%;
+    }
+}
+
+.card-text-container {
+    position: relative;
+    z-index: 1;
+
+    color: #f7f6f6;
+    padding-top: 170px;
+
+    .card-text-heading, .card-text-body{
+        color: #f7f6f6;
+        padding-left: 50px;
+    }
+    .card-text-heading{
+        font-weight: 400;
+        font-size: 26px;
+    }
+    .card-text-body {
+        font-weight: 300;
+    }
+    .card-divider {
+        background-color: #f7f6f6;
+        height: 1px;
+        width: 30%;
+        margin:20px 0;
+        margin-left: 60px;
+    }
+}
+
+.card-text-container .card-text-body p{
+    font-variant: normal;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.card-right-heading {
+    padding:40px 0;
+}
+.card-right-heading .card-right-heading-text{
+    font-size: 24px;
+}
+
+.card-right-content-container{ 
+    .form-group {
+        padding:15px 0;
+    }
+
+    // Form input
+    .form-control{
+        border:none;
+        font-size: 16px;
+        border-bottom: 1px solid #000;
+        border-radius: unset;
+        font-variant: normal;
+        
+    }
+    .form-control:focus {
+        outline: none !important;
+        box-shadow: 1px 21px 23px 0px rgba(0,78,99,0.09);
+        -webkit-box-shadow: 1px 21px 23px 0px rgba(0,78,99,0.09);
+        -moz-box-shadow: 1px 21px 23px 0px rgba(0,78,99,0.09);
+    }
+}
+
+.bottom-link-container {
+    width: 100%;
+    padding:15px 20px;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+
+    a {
+        color: #006e8c !important;
+    }
+    a:hover{
+        text-decoration: underline;
+    }
+}
+
+
+
+
+
+// .button-container {
+//     margin-top: 30px;
+// }
+// .validation-popup {
+//     font-size: 0.8em;
+// }
