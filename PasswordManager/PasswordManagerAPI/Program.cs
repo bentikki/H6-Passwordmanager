@@ -15,6 +15,7 @@ namespace PasswordManagerAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
+                        .UseIISIntegration()
                         .UseUrls("http://localhost:4000");
                 });
     }

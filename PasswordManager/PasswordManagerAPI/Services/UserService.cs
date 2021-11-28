@@ -1,21 +1,14 @@
-﻿using BCryptNet = BCrypt.Net.BCrypt;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using PasswordManagerAPI.Entities;
 using PasswordManagerAPI.Helpers;
 using PasswordManagerAPI.Models.Users;
-using PasswordManagerAPI.Authorization;
-using PasswordManagerAPI.Contexts;
-using Dapper.Contrib.Extensions;
 using PasswordManagerAPI.Repositories;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using PasswordClassLibrary.Hashing;
 using PasswordManagerAPI.CustomExceptions;
 using PasswordManagerAPI.TokenHandlers.AccessTokens;
-using PasswordManagerAPI.TokenHandlers.RefreshTokens.Generators;
 using PasswordManagerAPI.TokenHandlers.RefreshTokens;
 
 namespace PasswordManagerAPI.Services
@@ -69,6 +62,7 @@ namespace PasswordManagerAPI.Services
             }
             if (mail.Host != "zbc.dk") throw new ArgumentException("The mail must be @ZBC.dk domain", nameof(createUserRequest.Username));
 
+            // TODO: Add check for an allready existing user.
 
             // Create passwordhash using IHashingService
             string hashedUserPassword = this._hashingService.GenerateHashedString(createUserRequest.Password);
@@ -185,6 +179,7 @@ namespace PasswordManagerAPI.Services
 
             return new AuthenticateResponse((UserEntity)authenticateUser, accessToken, refreshToken.Token);
         }
+
 
         public async Task<AuthenticateResponse> RefreshAccessTokenAsync(string token)
         {

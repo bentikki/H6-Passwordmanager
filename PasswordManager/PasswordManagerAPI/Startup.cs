@@ -6,14 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using PasswordClassLibrary.Hashing;
 using PasswordManagerAPI.Authorization;
 using PasswordManagerAPI.Contexts;
-using PasswordManagerAPI.Entities;
 using PasswordManagerAPI.Helpers;
 using PasswordManagerAPI.Repositories;
 using PasswordManagerAPI.Services;
 using PasswordManagerAPI.TokenHandlers.AccessTokens;
 using PasswordManagerAPI.TokenHandlers.RefreshTokens;
 using System.Globalization;
-using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace PasswordManagerAPI
 {
@@ -30,6 +28,9 @@ namespace PasswordManagerAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+
+
+
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.IgnoreNullValues = true);
 
             // configure strongly typed settings object
@@ -66,10 +67,10 @@ namespace PasswordManagerAPI
 
             // global cors policy
             app.UseCors(x => x
-                .SetIsOriginAllowed(origin => true)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials());
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
 
             app.UseCookiePolicy(
                 new CookiePolicyOptions

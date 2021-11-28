@@ -9,8 +9,9 @@ namespace PasswordManagerAPI.Repositories
     {
         Task<IUser> GetByUsernameAsync(string username);
         Task<IUser> GetByActiveTokenAsync(string refreshTokenValue);
-        Task<IRefreshToken> GetTokenByUserAsync(IUser user);
         Task<IAuthenticateUser> GetAuthenticateUserAsync(string username);
+
+        Task<IRefreshToken> GetTokenByUserAsync(IUser user);
         Task<bool> SetNewRefreshTokenForUserAsync(IRefreshToken refreshToken, IUser user);
         Task<bool> RevokeAccessTokenAsync(IRefreshToken refreshToken);
     }

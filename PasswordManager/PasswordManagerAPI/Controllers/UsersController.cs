@@ -43,7 +43,7 @@ namespace PasswordManagerAPI.Controllers
             catch (Exception e)
             {
                 string errorMessage = e.Message;
-                return BadRequest(new ErrorResponse(errorMessage));
+                return BadRequest(new ErrorResponse(errorMessage +" - " + e.InnerException.Message));
             }
         }
 

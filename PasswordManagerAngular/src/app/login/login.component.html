@@ -1,8 +1,8 @@
-﻿<div class="row no-gutters mt-5">
+﻿<div class="row no-gutters mt-md-5">
     <div class="card-container-background mt-md-5 col-12">
         <div class="row no-gutters">
             <!-- Text container -->
-            <div class="col-6 card-left-container d-none d-sm-block">
+            <div class="col-6 card-left-container d-none d-md-block">
                 <div class="container-bg-image"><div class="container-bg-image-cover"></div></div>
                 <div class="card-text-container">
                     <div class="card-text-heading">
@@ -16,12 +16,12 @@
             </div>
 
             <!-- Form container  -->
-            <div class="col-6 card-right-container">
+            <div class="col-12 col-md-6 card-right-container">
                 <div class="w-100 text-center card-right-heading">
                     <h2 class="card-right-heading-text">Log ind</h2>
                 </div>
 
-                <div class="col-8 offset-md-2 col-xs-12 mt-md-2 card-right-content-container">
+                <div class="col-12 col-md-12 mt-md-2 card-right-content-container">
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="form-group">
                             <input type="text" formControlName="username" placeholder="Email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
