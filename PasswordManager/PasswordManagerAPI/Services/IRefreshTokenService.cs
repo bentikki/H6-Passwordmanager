@@ -1,4 +1,5 @@
-﻿using PasswordManagerAPI.Models.Users;
+﻿using PasswordManagerAPI.Models.RefreshTokens;
+using PasswordManagerAPI.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace PasswordManagerAPI.Services
 {
     public interface IRefreshTokenService
     {
-        Task<AuthenticateResponse> RefreshAccessTokenAsync(string token);
+        Task<RefreshTokenResponse> RefreshAccessTokenAsync(string token);
         Task RevokeAccessTokenAsync(string token);
     }
 }

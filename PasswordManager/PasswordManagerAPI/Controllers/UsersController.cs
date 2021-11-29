@@ -12,8 +12,8 @@ namespace PasswordManagerAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
-    public class UsersController : ControllerBase
+    [Route("v1/[controller]")]
+    public class UsersController : CustomControllerBase
     {
         private IUserService _userService;
 
@@ -57,7 +57,7 @@ namespace PasswordManagerAPI.Controllers
             try
             {
                 AuthenticateResponse authenticateResponse = await _userService.AuthenticateAsync(model);
-                setTokenCookie(authenticateResponse.RefreshToken);
+                setTokenCookie("refreshToken", authenticateResponse.RefreshToken);
                 return Ok(authenticateResponse);
             }
             catch (Exception e)
@@ -77,7 +77,7 @@ namespace PasswordManagerAPI.Controllers
             {
                 string refreshToken = Request.Cookies["refreshToken"];
                 AuthenticateResponse response = await _userService.RefreshAccessTokenAsync(refreshToken);
-                setTokenCookie(response.RefreshToken);
+                setTokenCookie("refreshToken", response.RefreshToken);
                 return Ok(response);
             }
             catch (Exception e)
@@ -111,18 +111,7 @@ namespace PasswordManagerAPI.Controllers
         }
 
 
-        // helper methods
-        private void setTokenCookie(string token)
-        {
-            // append cookie with refresh token to the http response
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(1),
-                SameSite = SameSiteMode.None
-            };
-            Response.Cookies.Append("refreshToken", token, cookieOptions);
-        }
+
 
     }
 }

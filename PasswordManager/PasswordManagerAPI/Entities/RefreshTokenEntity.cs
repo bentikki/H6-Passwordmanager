@@ -27,5 +27,7 @@ namespace PasswordManagerAPI.Entities
         public bool IsRevoked => Revoked != null;
         [Write(false)]
         public bool IsActive => !IsRevoked && !IsExpired;
+
+        public int UserID { get => this.FK_Users_Id; }
     }
 }

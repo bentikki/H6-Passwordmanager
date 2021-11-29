@@ -15,8 +15,8 @@ namespace PasswordClassLibrary.Hashing
         private readonly HashingSettings _hashingSettings;
         private readonly IHashingMethod _hashingMethod;
 
-        // The max lenght of strings to be hashed - as per defined by NIST conventions.
-        private const int MaxStringLength = 64;
+        // The max length of strings to be hashed - as per defined by NIST conventions.
+        private readonly int _maxStringLength;
 
         /// <summary>
         /// Facade used for hashing service functionality. Able to hash string input.
@@ -33,6 +33,9 @@ namespace PasswordClassLibrary.Hashing
             // Use the provided settings.
             this._hashingSettings = hashingSettings;
 
+            // Set the max input value based on hashing settings.
+            this._maxStringLength = 188;
+
             // Set IHashingMethod from HashingMethodFactory
             this._hashingMethod = HashingMethodFactory.GetHashingMethod(this._hashingSettings.PepperByteArray, _hashingSettings.NumberOfIterations, _hashingSettings.KeyLength);
         }
@@ -48,7 +51,7 @@ namespace PasswordClassLibrary.Hashing
         {
             // Validate input
             if (string.IsNullOrEmpty(inputString) || string.IsNullOrWhiteSpace(inputString)) throw new ArgumentException("Then provided string must not be null or empty.", nameof(inputString));
-            if (inputString.Length > MaxStringLength) throw new ArgumentException($"The provided string must not exceed a length of {MaxStringLength} characters.", nameof(inputString));
+            if (inputString.Length > _maxStringLength) throw new ArgumentException($"The provided string must not exceed a length of {_maxStringLength} characters.", nameof(inputString));
 
             try
             {
@@ -83,7 +86,7 @@ namespace PasswordClassLibrary.Hashing
             // Validate input - neither of the provided string must be empty, null, or whitespace, nor must the valueToCompare exceed limit set in MaxStringLength.
             if (string.IsNullOrEmpty(valueToCompare) || string.IsNullOrWhiteSpace(valueToCompare)) throw new ArgumentException("Then provided valueToCompare string must not be null or empty.", nameof(valueToCompare));
             if (string.IsNullOrEmpty(originalHash) || string.IsNullOrWhiteSpace(originalHash)) throw new ArgumentException("Then provided originalHash string must not be null or empty.", nameof(originalHash));
-            if (valueToCompare.Length > MaxStringLength) throw new ArgumentException($"The provided valueToCompare string must not exceed a length of {MaxStringLength} characters.", nameof(valueToCompare));
+            if (valueToCompare.Length > _maxStringLength) throw new ArgumentException($"The provided valueToCompare string must not exceed a length of {_maxStringLength} characters.", nameof(valueToCompare));
 
             try
             {

@@ -13,25 +13,21 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Repositories
 {
+    /// <summary>
+    /// Repository used for dealing with User entities from the database.
+    /// </summary>
     internal class UserRepositoryDB : IUserRepository
     {
-        private DapperContext _context;
+        private IContext _context;
 
-        public UserRepositoryDB(DapperContext context)
+        /// <summary>
+        /// Repository used for dealing with User entities.
+        /// </summary>
+        /// <param name="context">The IContext to use while handling with database connections.</param>
+        public UserRepositoryDB(IContext context)
         {
             _context = context;
         }
-
-        public Task<IEnumerable<IUser>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IUser> UpdateAsync(IUser entity)
-        {
-            throw new NotImplementedException();
-        }
-
 
         /// <summary>
         /// Creates the IUser object in the database.
@@ -264,6 +260,12 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns the IUser entity matching the provided RefreshToken value.
+        /// Returns null if the provided token does not match any user.
+        /// </summary>
+        /// <param name="refreshTokenValue">The value of the RefreshToken owned by the requested User entity</param>
+        /// <returns>IUser object of user entity owning the provided refreshtoken value - Returns null if the token does not match.</returns>
         public async Task<IUser> GetBytokenAsync(string refreshTokenValue)
         {
             try
@@ -296,6 +298,8 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
+        
+        // Implemented in RefreshTokenRepo
         public async Task<IRefreshToken> GetTokenByUserAsync(IUser user)
         {
             try
@@ -328,6 +332,8 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
+
+        // Implemented in RefreshTokenRepo
         public async Task<IUser> GetByActiveTokenAsync(string refreshTokenValue)
         {
             try
@@ -360,6 +366,8 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
+
+        // Implemented in RefreshTokenRepo
         public async Task<bool> RevokeAccessTokenAsync(IRefreshToken refreshToken)
         {
             try

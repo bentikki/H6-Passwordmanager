@@ -30,12 +30,13 @@ namespace PasswordClassLibrary.Hashing
         /// Settings used in the IHashingService.
         /// A provided byte array containing the pepper bytes, must be provided. 
         /// Optionally saltLength, keyLength, and numberOfIterations can be set, else they will use the values recommended by NIST.
+        /// Reference: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2
         /// </summary>
         /// <param name="pepperByteArray">Required 32 byte array with pepper values.</param>
-        /// <param name="saltLength">Length of randomly generated salt - recommended value: 32</param>
-        /// <param name="keyLength">Length of hashed key value - recommended value: 32</param>
-        /// <param name="numberOfIterations">Number of iterations the hashing method will be run - recommended 50.000</param>
-        public HashingSettings(byte[] pepperByteArray, byte saltLength = 32, byte keyLength = 32, int numberOfIterations = 50000)
+        /// <param name="saltLength">Length of randomly generated salt - recommended value: 64</param>
+        /// <param name="keyLength">Length of hashed key value - recommended value: 64</param>
+        /// <param name="numberOfIterations">Number of iterations the hashing method will be run - recommended 120.000</param>
+        public HashingSettings(byte[] pepperByteArray, byte saltLength = 64, byte keyLength = 64, int numberOfIterations = 120000)
         {
             PepperByteArray = pepperByteArray;
             SaltLength = saltLength;

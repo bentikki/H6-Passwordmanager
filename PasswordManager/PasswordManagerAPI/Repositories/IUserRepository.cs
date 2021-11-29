@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Repositories
 {
-    public interface IUserRepository : IRepositoryRead<IUser, int>, IRepositoryWrite<IUser> 
+    public interface IUserRepository
     {
+        Task<bool> DeleteAsync(IUser entity);
+        Task<IUser> CreateAsync(IUser entity);
+        Task<IUser> GetAsync(int id);
         Task<IUser> GetByUsernameAsync(string username);
         Task<IUser> GetByActiveTokenAsync(string refreshTokenValue);
         Task<IAuthenticateUser> GetAuthenticateUserAsync(string username);

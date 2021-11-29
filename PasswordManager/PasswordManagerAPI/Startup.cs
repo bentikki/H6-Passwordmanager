@@ -37,7 +37,7 @@ namespace PasswordManagerAPI
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // Context
-            services.AddSingleton<DapperContext>();
+            services.AddSingleton<IContext, DapperContext>();
 
             // Configure repositories to be used in DI.
             services.AddScoped<IUserRepository, UserRepositoryDB>();

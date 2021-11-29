@@ -36,7 +36,7 @@ namespace PasswordClassLibrary.Hashing.HashingMethod
             {
                 byte[] initialHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
 
-                //Generate a key value using pbkdf2 that will serve as the password hash
+                //Generate a key value using PBKDF2 that will serve as the password hash
                 using (var pbkdf2 = new Rfc2898DeriveBytes(initialHash, salt, _numberOfIteration))
                 {
                     return pbkdf2.GetBytes(this._keyLength);

@@ -57,8 +57,8 @@ namespace PasswordClassLibrary.Tests
         }
 
         [Theory]
-        [InlineData("hhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgys")] // Test string with 65 characters.
-        [InlineData("hhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgysquyhg")] // Test string with 70 characters.
+        [InlineData("hhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgyshhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgysquyhghhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgysquyhg")] // Test string with 65 characters.
+        [InlineData("hhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgysquyhghhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgysquyhghhrorompshaylgbbqllrbhbfchslgsyeiqyzwzidmffckyjhclzbfmxwhzbsjhgysquyhg")] // Test string with 70 characters.
         public void GenerateHashedString_ExceedingMaxLength_ShouldThrowArgumentException(string originalStringInput)
         {
             // Arrange

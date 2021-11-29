@@ -49,6 +49,8 @@ namespace PasswordManagerAPI.Services
             // Field Validation 
             if (string.IsNullOrEmpty(createUserRequest.Username)) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be null.");
             if (string.IsNullOrEmpty(createUserRequest.Password)) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be null.");
+            if (createUserRequest.Password.Length > 128) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be longer than 128 characters.");
+            if (createUserRequest.Username.Length > 100) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be longer than 100 characters.");
 
             // Mail validation
             MailAddress mail;
@@ -62,7 +64,12 @@ namespace PasswordManagerAPI.Services
             }
             if (mail.Host != "zbc.dk") throw new ArgumentException("The mail must be @ZBC.dk domain", nameof(createUserRequest.Username));
 
-            // TODO: Add check for an allready existing user.
+            // Check if an user with the provided username already exists - throw an exception if it does.
+            IUser existingUser = await this.GetUserByUsernameAsync(createUserRequest.Username);
+            if(existingUser != null)
+            {
+                throw new ArgumentException("A user with the provided username allready exist.", nameof(createUserRequest.Username));
+            }
 
             // Create passwordhash using IHashingService
             string hashedUserPassword = this._hashingService.GenerateHashedString(createUserRequest.Password);

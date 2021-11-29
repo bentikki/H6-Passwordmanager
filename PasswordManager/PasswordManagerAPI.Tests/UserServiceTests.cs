@@ -6,6 +6,7 @@ using System;
 using Xunit;
 using System.Threading.Tasks;
 using PasswordManagerAPI.Models.Users;
+using PasswordManagerAPI.CustomExceptions;
 
 namespace PasswordManagerAPI.Tests
 {
@@ -69,6 +70,24 @@ namespace PasswordManagerAPI.Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => _userService.CreateUserAsync(createUserRequest));
         }
 
+        [Fact]
+        public async Task CreateUserAsync_AlreadyExistingUser_ShouldThrowArgumentException()
+        {
+            // Arrange
+            CreateUserRequest createUserRequest = new CreateUserRequest();
+            createUserRequest.Username = _validTestUsername;
+            createUserRequest.Password = _validTestPassword;
+
+            // Create temp user
+            IUser tempUser = await _userService.CreateUserAsync(createUserRequest);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _userService.CreateUserAsync(createUserRequest));
+
+            // Cleanup
+            await _userService.DeleteUserAsync(tempUser);
+        }
+
         [Theory]
         [InlineData(" ")]
         [InlineData("teststringwithoutAt")]
@@ -84,6 +103,73 @@ namespace PasswordManagerAPI.Tests
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(() => _userService.CreateUserAsync(createUserRequest));
+        }
+
+        [Fact]
+        public async Task AuthenticateAsync_ValidCredentials_ShouldReturnAuthenticateResponse()
+        {
+            // Arrange
+            CreateUserRequest createUserRequest = new CreateUserRequest();
+            createUserRequest.Username = _validTestUsername;
+            createUserRequest.Password = _validTestPassword;
+            IUser user = await _userService.CreateUserAsync(createUserRequest);
+
+            AuthenticateResponse authenticateResponse;
+            AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+            authenticateRequest.Username = _validTestUsername;
+            authenticateRequest.Password = _validTestPassword;
+
+            // Act
+            authenticateResponse = await this._userService.AuthenticateAsync(authenticateRequest);
+
+            // Cleanup
+            Assert.True(_userService.DeleteUserAsync(user).Result);
+
+            // Assert
+            Assert.NotNull(authenticateResponse);
+            Assert.NotEqual(0, authenticateResponse.Id);
+            Assert.Equal(user.Username, authenticateResponse.Username);
+            Assert.False(string.IsNullOrEmpty(authenticateResponse.JwtToken));
+        }
+
+        [Fact]
+        public async Task AuthenticateAsync_InvalidPassword_ShouldReturnInvalidCredentialsException()
+        {
+            // Arrange
+            CreateUserRequest createUserRequest = new CreateUserRequest();
+            createUserRequest.Username = _validTestUsername;
+            createUserRequest.Password = _validTestPassword;
+            IUser user = await _userService.CreateUserAsync(createUserRequest);
+
+            AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+            authenticateRequest.Username = _validTestUsername;
+            authenticateRequest.Password = _validTestPassword + "TnvalidAddition";
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidCredentialsException>(() => this._userService.AuthenticateAsync(authenticateRequest));
+
+            // Cleanup
+            Assert.True(_userService.DeleteUserAsync(user).Result);
+        }
+
+        [Fact]
+        public async Task AuthenticateAsync_InvalidUsername_ShouldReturnInvalidCredentialsException()
+        {
+            // Arrange
+            CreateUserRequest createUserRequest = new CreateUserRequest();
+            createUserRequest.Username = _validTestUsername;
+            createUserRequest.Password = _validTestPassword;
+            IUser user = await _userService.CreateUserAsync(createUserRequest);
+
+            AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+            authenticateRequest.Username = _validTestUsername + "TnvalidAddition";
+            authenticateRequest.Password = _validTestPassword;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidCredentialsException>(() => this._userService.AuthenticateAsync(authenticateRequest));
+
+            // Cleanup
+            Assert.True(_userService.DeleteUserAsync(user).Result);
         }
 
         [Fact]
@@ -231,6 +317,19 @@ namespace PasswordManagerAPI.Tests
 
             // Cleanup
             Assert.True(this._userService.DeleteUserAsync(createdTestUser).Result);
+        }
+
+        [Fact]
+        public async Task GetByUsernameAsync_invalidUsername_ShouldReturnNull()
+        {
+            // Arrange
+            IUser fetchedUserObject = null;
+
+            // Act
+            fetchedUserObject = await this._userService.GetUserByUsernameAsync(_validTestUsername);
+
+            // Assert
+            Assert.Null(fetchedUserObject);
         }
 
     }

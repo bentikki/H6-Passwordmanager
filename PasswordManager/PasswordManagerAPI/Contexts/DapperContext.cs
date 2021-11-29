@@ -12,7 +12,7 @@ namespace PasswordManagerAPI.Contexts
     /// Connection Context helper for Dapper implementation.
     /// Grants connection access to database, based on connectionstrings in appserrings.json.
     /// </summary>
-    public class DapperContext
+    public class DapperContext : IContext
     {
         private readonly IConfiguration _configuration;
         public DapperContext(IConfiguration configuration)
