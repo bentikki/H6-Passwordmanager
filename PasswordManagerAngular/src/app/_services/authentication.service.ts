@@ -1,8 +1,8 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, ɵresetJitOptions } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
@@ -26,8 +26,9 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        return this.http.post<any>(`${environment.apiUrl}/users/authenticate`, { username, password }, { withCredentials: true })
+        return this.http.post<any>(`${environment.apiUrl}/v1/users/authenticate`, { username, password }, { withCredentials: true })
             .pipe(map(user => {
+                console.log(user);
                 this.userSubject.next(user);
                 this.startRefreshTokenTimer();
                 return user;
@@ -35,15 +36,20 @@ export class AuthenticationService {
     } 
 
     createUser(username: string, password: string) {
-        return this.http.post<any>(`${environment.apiUrl}/users`, { username, password })
-            .pipe(map(user => {
+        return this.http.post<any>(`${environment.apiUrl}/v1/users`, { username, password })
+            .pipe(
+                map(user => {
                 return user;
             }));
     }
 
+    createNewUser(username: string, password: string){
+        return this.http.post<any>(`${environment.apiUrl}/v1/users`, { username, password },{observe: 'response'});   
+    }
+
 
     logout() {
-        this.http.post<any>(`${environment.apiUrl}/users/revoke-token`, {}, { withCredentials: true }).subscribe();
+        this.http.post<any>(`${environment.apiUrl}/v1/token/revoke`, {}, { withCredentials: true }).subscribe();
         this.stopRefreshTokenTimer();
         this.userSubject.next(null);
         this.router.navigate(['/login']);
@@ -51,7 +57,7 @@ export class AuthenticationService {
 
     refreshToken() {
 
-        return this.http.post<any>(`${environment.apiUrl}/users/refresh-token`, {}, { withCredentials: true })
+        return this.http.post<any>(`${environment.apiUrl}/v1/token/refresh`, {}, { withCredentials: true })
             .pipe(map((user) => {
                 this.userSubject.next(user);
                 this.startRefreshTokenTimer();
@@ -65,7 +71,7 @@ export class AuthenticationService {
 
     private startRefreshTokenTimer() {
         // parse json object from base64 encoded jwt token
-        const jwtToken = JSON.parse(atob(this.userValue.jwtToken.split('.')[1]));
+        const jwtToken = JSON.parse(atob(this.userValue.tokenSet.accessToken.split('.')[1]));
 
         // set a timeout to refresh the token a minute before it expires
         const expires = new Date(jwtToken.exp * 1000);

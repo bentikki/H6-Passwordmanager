@@ -9,6 +9,7 @@ using System.Net.Mail;
 using PasswordClassLibrary.Hashing;
 using PasswordManagerAPI.CustomExceptions;
 using PasswordManagerAPI.Models.RefreshTokens;
+using PasswordClassLibrary.Validation;
 
 namespace PasswordManagerAPI.Services
 {
@@ -46,22 +47,25 @@ namespace PasswordManagerAPI.Services
         public async Task<IUser> CreateUserAsync(CreateUserRequest createUserRequest)
         {
             // Field Validation 
-            if (string.IsNullOrEmpty(createUserRequest.Username)) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be null.");
-            if (string.IsNullOrEmpty(createUserRequest.Password)) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be null.");
-            if (createUserRequest.Password.Length > 128) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be longer than 128 characters.");
-            if (createUserRequest.Username.Length > 100) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be longer than 100 characters.");
+            Validator.ValidateAndThrow("Mail", createUserRequest.Username);
+            Validator.ValidateAndThrow("Password", createUserRequest.Password);
 
-            // Mail validation
-            MailAddress mail;
-            try
-            {
-                mail = new MailAddress(createUserRequest.Username);
+            ////if (string.IsNullOrEmpty(createUserRequest.Username)) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be null.");
+            //if (string.IsNullOrEmpty(createUserRequest.Password)) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be null.");
+            //if (createUserRequest.Password.Length > 128) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be longer than 128 characters.");
+            //if (createUserRequest.Username.Length > 100) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be longer than 100 characters.");
+
+            //// Mail validation
+            //MailAddress mail;
+            //try
+            //{
+            //    mail = new MailAddress(createUserRequest.Username);
                 
-            }catch(Exception e)
-            {
-                throw new ArgumentException(e.Message, nameof(createUserRequest.Username));
-            }
-            if (mail.Host != "zbc.dk") throw new ArgumentException("The mail must be @ZBC.dk domain", nameof(createUserRequest.Username));
+            //}catch(Exception e)
+            //{
+            //    throw new ArgumentException(e.Message, nameof(createUserRequest.Username));
+            //}
+            //if (mail.Host != "zbc.dk") throw new ArgumentException("The mail must be @ZBC.dk domain", nameof(createUserRequest.Username));
 
             // Check if an user with the provided username already exists - throw an exception if it does.
             IUser existingUser = await this.GetUserByUsernameAsync(createUserRequest.Username);
@@ -90,7 +94,7 @@ namespace PasswordManagerAPI.Services
         {
             // Field Validation 
             if (userToBeDeleted == null) throw new ArgumentNullException(nameof(userToBeDeleted), "The user object must not be null.");
-            if (userToBeDeleted.Id <= 0) throw new ArgumentNullException(nameof(userToBeDeleted), "The user object must have a valid id.");
+            Validator.ValidateAndThrow("UserID", userToBeDeleted.Id);
 
             bool deletionSuccess = false;
             
@@ -111,7 +115,7 @@ namespace PasswordManagerAPI.Services
         public async Task<IUser> GetUserByIdAsync(int id)
         {
             // Input validation
-            if (id <= 0) throw new ArgumentException(nameof(id), "A valid id must be provided.");
+            Validator.ValidateAndThrow("UserID", id);
 
             IUser user = null;
 
@@ -131,8 +135,8 @@ namespace PasswordManagerAPI.Services
         public async Task<IUser> GetUserByUsernameAsync(string username)
         {
             // Input validation
-            if (string.IsNullOrEmpty(username) ||string.IsNullOrWhiteSpace(username)) throw new ArgumentNullException(nameof(username), "Username must not be null.");
-
+            Validator.ValidateAndThrow("Mail", username);
+           
             // Mail validation
             MailAddress mail;
             try
@@ -162,6 +166,10 @@ namespace PasswordManagerAPI.Services
         /// <returns>AuthenticateResponse containing authentification information.</returns>
         public async Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest authenticateRequest)
         {
+            // Input validation
+            Validator.ValidateAndThrow("Mail", authenticateRequest.Username);
+            Validator.ValidateAndThrow("Password", authenticateRequest.Password);
+
             // Get user matching the attempted login.
             IAuthenticateUser authenticateUser = await this._userRepository.GetAuthenticateUserAsync(authenticateRequest.Username);
 
@@ -182,7 +190,7 @@ namespace PasswordManagerAPI.Services
             }
 
 
-            return new AuthenticateResponse((UserEntity)authenticateUser, accessRefreshTokenSet.AccessToken, accessRefreshTokenSet.RefreshToken.Token);
+            return new AuthenticateResponse((UserEntity)authenticateUser, accessRefreshTokenSet);
         }
 
         /// <summary>
@@ -194,7 +202,7 @@ namespace PasswordManagerAPI.Services
         public async Task<IUser> GetUserByTokenAsync(string token)
         {
             // Input validation
-            if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token)) throw new ArgumentNullException(nameof(token), "Token must not be null.");
+            Validator.ValidateAndThrow("Token", token);
 
             IUser user = null;
 

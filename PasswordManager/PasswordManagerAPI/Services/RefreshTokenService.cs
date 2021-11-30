@@ -1,4 +1,5 @@
-﻿using PasswordManagerAPI.CustomExceptions;
+﻿using PasswordClassLibrary.Validation;
+using PasswordManagerAPI.CustomExceptions;
 using PasswordManagerAPI.Models.RefreshTokens;
 using PasswordManagerAPI.Models.Users;
 using PasswordManagerAPI.Repositories;
@@ -35,7 +36,8 @@ namespace PasswordManagerAPI.Services
         /// <returns>RefreshTokenResponse containing the new token set</returns>
         public async Task<RefreshTokenResponse> RefreshAccessTokenAsync(string token, IUser tokenOwner)
         {
-            if (token == null || string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token)) throw new ArgumentException("Invalid token value", nameof(token));
+            // Validate input
+            Validator.ValidateAndThrow("Token", token);
 
             IRefreshToken oldRefreshToken = await this._refreshTokenRepository.Get(token);
 
@@ -65,11 +67,14 @@ namespace PasswordManagerAPI.Services
         /// <returns></returns>
         public AccessRefreshTokenSet GenerateNewTokenSet(string tokenClaimId)
         {
-            if (tokenClaimId == null || string.IsNullOrEmpty(tokenClaimId) || string.IsNullOrWhiteSpace(tokenClaimId)) throw new ArgumentException("Invalid claim id", nameof(tokenClaimId));
+            // Validate input
+            Validator.ValidateAndThrow("UserID", tokenClaimId);
 
-            long tokenClaimIdInt = 0;
-            bool tokenClaimIsInt = long.TryParse(tokenClaimId, out tokenClaimIdInt);
-            if(!tokenClaimIsInt || tokenClaimIdInt < 0) throw new ArgumentException("Token claim must be numeric and a valid user id.", nameof(tokenClaimId));
+            //if (tokenClaimId == null || string.IsNullOrEmpty(tokenClaimId) || string.IsNullOrWhiteSpace(tokenClaimId)) throw new ArgumentException("Invalid claim id", nameof(tokenClaimId));
+
+            //long tokenClaimIdInt = 0;
+            //bool tokenClaimIsInt = long.TryParse(tokenClaimId, out tokenClaimIdInt);
+            //if(!tokenClaimIsInt || tokenClaimIdInt < 0) throw new ArgumentException("Token claim must be numeric and a valid user id.", nameof(tokenClaimId));
 
 
             // Create a new token set containing refreshtoken and access token.
@@ -86,6 +91,9 @@ namespace PasswordManagerAPI.Services
         /// <param name="token">The value of the token entity to revoke.</param>
         public async Task RevokeAccessTokenAsync(string token)
         {
+            // Validate input
+            Validator.ValidateAndThrow("Token", token);
+
             IRefreshToken oldRefreshToken = await this._refreshTokenRepository.Get(token);
 
             if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)

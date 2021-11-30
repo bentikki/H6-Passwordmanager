@@ -1,12 +1,9 @@
 ﻿<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="user">
-    <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/">Home</a>
-        <a class="nav-item nav-link" (click)="logout()">Logout</a>
-    </div>
-</nav>
+<div class="mt-2 ml-2" style="position: absolute; top: 0; left: 0;" *ngIf="user">
+    <a class="text-muted" (click)="logout()">Log ud</a>
+</div>
 
 <!-- main app container -->
-<div class="container">
+<div class="container-fluid">
     <router-outlet></router-outlet>
 </div>

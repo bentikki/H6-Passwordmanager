@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordClassLibrary.Hashing;
+using PasswordClassLibrary.Validation;
+using PasswordClassLibrary.Validation.ValidationRules;
 using PasswordManagerAPI.Authorization;
 using PasswordManagerAPI.Contexts;
 using PasswordManagerAPI.Helpers;
@@ -11,6 +13,7 @@ using PasswordManagerAPI.Repositories;
 using PasswordManagerAPI.Services;
 using PasswordManagerAPI.TokenHandlers.AccessTokens;
 using PasswordManagerAPI.TokenHandlers.RefreshTokens;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace PasswordManagerAPI
@@ -29,8 +32,6 @@ namespace PasswordManagerAPI
         {
             services.AddCors();
 
-
-
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.IgnoreNullValues = true);
 
             // configure strongly typed settings object
@@ -38,10 +39,6 @@ namespace PasswordManagerAPI
 
             // Context
             services.AddSingleton<IContext, DapperContext>();
-
-            // Configure repositories to be used in DI.
-            services.AddScoped<IUserRepository, UserRepositoryDB>();
-            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepositoryDB>();
 
             // Configure DI for logic services.
             services.AddScoped<IHashingService>(s => HashingServiceFactory.GetHashingService(this.ConvertSpacedHexToByteArray(Configuration.GetValue<string>("AppSettings:PepperStringValue"))));
@@ -55,6 +52,12 @@ namespace PasswordManagerAPI
                     Configuration.GetValue<double>("AppSettings:RefreshTokenTTLinDays")
                     ));
 
+            // Set rules for the Validator.
+            SetValidationRuleSets();
+
+            // Configure repositories to be used in DI.
+            services.AddScoped<IUserRepository, UserRepositoryDB>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepositoryDB>();
 
             // Configure DI for application services
             services.AddScoped<IUserService, UserService>();
@@ -67,10 +70,12 @@ namespace PasswordManagerAPI
 
             app.UseRouting();
 
+            string[] allowedOrigins = { "http://localhost:4200/", "http://zbcpasswordbackend.eu.ngrok.io/" };
             // global cors policy
             app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
+                .WithOrigins(allowedOrigins)
                 .SetIsOriginAllowed(origin => true) // allow any origin
                 .AllowCredentials()); // allow credentials
 
@@ -87,6 +92,52 @@ namespace PasswordManagerAPI
             app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(x => x.MapControllers());
+        }
+
+
+        /// <summary>
+        /// Sets validation rules for input.
+        /// </summary>
+        private void SetValidationRuleSets()
+        {
+            Validator.AddRuleSet(
+                new ValidationRuleSet("Mail", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new NoEmptyStringRule(),
+                    new MaxLengthRule(100),
+                    new MinLengthRule(7),
+                    new ValidMailRule(),
+                    new MustHaveMailDomainRule("zbc.dk")
+                }
+            ));
+
+            Validator.AddRuleSet(
+                new ValidationRuleSet("Password", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new NoEmptyStringRule(),
+                    new MinLengthRule(40),
+                    new MaxLengthRule(100)
+                }
+            ));
+
+            Validator.AddRuleSet(
+                new ValidationRuleSet("Token", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new NoEmptyStringRule(),
+                    new MinLengthRule(20),
+                }
+            ));
+
+            Validator.AddRuleSet(
+                new ValidationRuleSet("UserID", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new MinValueRule(1)
+                }
+            ));
         }
 
         private byte[] ConvertSpacedHexToByteArray(string hexString)

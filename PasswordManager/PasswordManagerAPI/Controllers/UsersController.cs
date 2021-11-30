@@ -43,7 +43,7 @@ namespace PasswordManagerAPI.Controllers
             catch (Exception e)
             {
                 string errorMessage = e.Message;
-                return BadRequest(new ErrorResponse(errorMessage +" - " + e.InnerException.Message));
+                return BadRequest(new ErrorResponse(errorMessage));
             }
         }
 
@@ -57,7 +57,7 @@ namespace PasswordManagerAPI.Controllers
             try
             {
                 AuthenticateResponse authenticateResponse = await _userService.AuthenticateAsync(model);
-                setTokenCookie("refreshToken", authenticateResponse.RefreshToken);
+                setTokenCookie("refreshToken", authenticateResponse.TokenSet.RefreshToken.Token);
                 return Ok(authenticateResponse);
             }
             catch (Exception e)
