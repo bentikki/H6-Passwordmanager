@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using PasswordClassLibrary.Hashing;
 using PasswordManagerAPI.CustomExceptions;
-using PasswordManagerAPI.TokenHandlers.AccessTokens;
-using PasswordManagerAPI.TokenHandlers.RefreshTokens;
+using PasswordManagerAPI.Models.RefreshTokens;
 
 namespace PasswordManagerAPI.Services
 {
@@ -17,22 +16,22 @@ namespace PasswordManagerAPI.Services
     {
         private readonly AppSettings _appSettings;
         private readonly IUserRepository _userRepository;
+        private readonly IRefreshTokenService _refreshTokenService;
+
         private readonly IHashingService _hashingService;
-        private readonly IAccessTokenHandler _accessTokenHandler;
-        private readonly IRefreshTokenHandler _refreshTokenHandler; 
+
 
         public UserService(
             IOptions<AppSettings> appSettings,
             IUserRepository userRepository,
-            IHashingService hashingService,
-            IAccessTokenHandler accessTokenHandler,
-            IRefreshTokenHandler refreshTokenHandler)
+            IRefreshTokenService refreshTokenService,
+            IHashingService hashingService)
         {
             _appSettings = appSettings.Value;
             _userRepository = userRepository;
+            _refreshTokenService = refreshTokenService;
+
             _hashingService = hashingService;
-            _accessTokenHandler = accessTokenHandler;
-            _refreshTokenHandler = refreshTokenHandler;
         }
 
         /// <summary>
@@ -172,11 +171,10 @@ namespace PasswordManagerAPI.Services
                 throw new InvalidCredentialsException("Invalid credentials.");
 
             // authentication successful so generate access and refresh tokens
-            string accessToken = this._accessTokenHandler.GenerateToken(authenticateUser.Id.ToString());
-            IRefreshToken refreshToken = this._refreshTokenHandler.GenerateRefreshToken();
+            AccessRefreshTokenSet accessRefreshTokenSet = _refreshTokenService.GenerateNewTokenSet(authenticateUser.Id.ToString());
 
             // Add newly created RefreshToken to user and delete old ones.
-            bool newTokenSat = await this._userRepository.SetNewRefreshTokenForUserAsync(refreshToken, authenticateUser);
+            bool newTokenSat = await this._refreshTokenService.SetNewRefreshTokenForUserAsync(accessRefreshTokenSet.RefreshToken, authenticateUser);
 
             if (!newTokenSat)
             {
@@ -184,50 +182,69 @@ namespace PasswordManagerAPI.Services
             }
 
 
-            return new AuthenticateResponse((UserEntity)authenticateUser, accessToken, refreshToken.Token);
+            return new AuthenticateResponse((UserEntity)authenticateUser, accessRefreshTokenSet.AccessToken, accessRefreshTokenSet.RefreshToken.Token);
         }
 
-
-        public async Task<AuthenticateResponse> RefreshAccessTokenAsync(string token)
+        /// <summary>
+        /// Returns IUser object matching the provided token.
+        /// If the token does not exist or match any user, return null.
+        /// </summary>
+        /// <param name="token">The token to find a matching user entity</param>
+        /// <returns>IUser object matching the provided token</returns>
+        public async Task<IUser> GetUserByTokenAsync(string token)
         {
-            IUser user = await this._userRepository.GetByActiveTokenAsync(token);
+            // Input validation
+            if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token)) throw new ArgumentNullException(nameof(token), "Token must not be null.");
 
-            if (user == null) throw new ArgumentException("Invalid token value", nameof(token));
+            IUser user = null;
 
-            IRefreshToken oldRefreshToken = await this._userRepository.GetTokenByUserAsync(user);
+            // Get the requested user entity from repository.
+            user = await this._userRepository.GetByTokenAsync(token);
 
-            if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)
-            {
-                throw new InvalidCredentialsException("Invalid refresh token.");
-            }
-
-            // authentication successful so generate access and refresh tokens
-            string accessToken = this._accessTokenHandler.GenerateToken(user.Id.ToString());
-            IRefreshToken refreshToken = this._refreshTokenHandler.GenerateRefreshToken();
-
-            // Add newly created RefreshToken to user and delete old ones.
-            bool newTokenSat = await this._userRepository.SetNewRefreshTokenForUserAsync(refreshToken, user);
-
-            if (!newTokenSat)
-            {
-                throw new ArgumentException("The new token could not be set.", nameof(token));
-            }
-
-            return new AuthenticateResponse((UserEntity)user, accessToken, refreshToken.Token);
+            return user;
         }
 
-        public async Task RevokeAccessTokenAsync(string token)
-        {
-            IUser user = await this._userRepository.GetByActiveTokenAsync(token);
-            IRefreshToken oldRefreshToken = await this._userRepository.GetTokenByUserAsync(user);
 
-            if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)
-            {
-                throw new InvalidCredentialsException("Invalid refresh token.");
-            }
+        //public async Task<AuthenticateResponse> RefreshAccessTokenAsync(string token)
+        //{
+        //    IUser user = await this._userRepository.GetByActiveTokenAsync(token);
 
-            await this._userRepository.RevokeAccessTokenAsync(oldRefreshToken);
-        }
+        //    if (user == null) throw new ArgumentException("Invalid token value", nameof(token));
+
+        //    IRefreshToken oldRefreshToken = await this._userRepository.GetTokenByUserAsync(user);
+
+        //    if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)
+        //    {
+        //        throw new InvalidCredentialsException("Invalid refresh token.");
+        //    }
+
+        //    // authentication successful so generate access and refresh tokens
+        //    string accessToken = this._accessTokenHandler.GenerateToken(user.Id.ToString());
+        //    IRefreshToken refreshToken = this._refreshTokenHandler.GenerateRefreshToken();
+
+        //    // Add newly created RefreshToken to user and delete old ones.
+        //    bool newTokenSat = await this._userRepository.SetNewRefreshTokenForUserAsync(refreshToken, user);
+
+        //    if (!newTokenSat)
+        //    {
+        //        throw new ArgumentException("The new token could not be set.", nameof(token));
+        //    }
+
+        //    return new AuthenticateResponse((UserEntity)user, accessToken, refreshToken.Token);
+        //}
+
+        //public async Task RevokeAccessTokenAsync(string token)
+        //{
+        //    IUser user = await this._userRepository.GetByActiveTokenAsync(token);
+        //    IRefreshToken oldRefreshToken = await this._userRepository.GetTokenByUserAsync(user);
+
+        //    if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)
+        //    {
+        //        throw new InvalidCredentialsException("Invalid refresh token.");
+        //    }
+
+        //    await this._userRepository.RevokeAccessTokenAsync(oldRefreshToken);
+        //}
 
     }
 }

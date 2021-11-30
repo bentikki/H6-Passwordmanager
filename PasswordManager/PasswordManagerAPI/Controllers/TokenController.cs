@@ -17,10 +17,14 @@ namespace PasswordManagerAPI.Controllers
     public class TokenController : CustomControllerBase
     {
         private IRefreshTokenService _refreshTokenService;
+        private IUserService _userService;
 
-        public TokenController(IRefreshTokenService refreshTokenService)
+        public TokenController(
+            IRefreshTokenService refreshTokenService,
+            IUserService userService)
         {
             _refreshTokenService = refreshTokenService;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -32,8 +36,9 @@ namespace PasswordManagerAPI.Controllers
             try
             {
                 string refreshToken = Request.Cookies["refreshToken"];
-                RefreshTokenResponse response = await _refreshTokenService.RefreshAccessTokenAsync(refreshToken);
-                setTokenCookie("refreshToken", response.RefreshToken.Token);
+                IUser user = await _userService.GetUserByTokenAsync(refreshToken);
+                RefreshTokenResponse response = await _refreshTokenService.RefreshAccessTokenAsync(refreshToken, user);
+                setTokenCookie("refreshToken", response.TokenSet.RefreshToken.Token);
                 return Ok(response);
             }
             catch (Exception e)

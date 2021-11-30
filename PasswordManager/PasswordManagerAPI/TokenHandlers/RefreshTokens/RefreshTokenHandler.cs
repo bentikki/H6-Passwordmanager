@@ -1,4 +1,5 @@
-﻿using PasswordManagerAPI.TokenHandlers.RefreshTokens.Generators;
+﻿using PasswordManagerAPI.Models.RefreshTokens;
+using PasswordManagerAPI.TokenHandlers.RefreshTokens.Generators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

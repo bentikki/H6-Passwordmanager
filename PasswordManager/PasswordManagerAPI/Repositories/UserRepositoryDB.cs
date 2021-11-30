@@ -3,6 +3,7 @@ using Dapper.Contrib.Extensions;
 using PasswordManagerAPI.Contexts;
 using PasswordManagerAPI.CustomExceptions;
 using PasswordManagerAPI.Entities;
+using PasswordManagerAPI.Models.RefreshTokens;
 using PasswordManagerAPI.Models.Users;
 using PasswordManagerAPI.TokenHandlers.RefreshTokens;
 using System;
@@ -266,75 +267,7 @@ namespace PasswordManagerAPI.Repositories
         /// </summary>
         /// <param name="refreshTokenValue">The value of the RefreshToken owned by the requested User entity</param>
         /// <returns>IUser object of user entity owning the provided refreshtoken value - Returns null if the token does not match.</returns>
-        public async Task<IUser> GetBytokenAsync(string refreshTokenValue)
-        {
-            try
-            {
-                IUser user = null;
-
-                // Connect to database using connectionstring defined in appsettings.json
-                using (var conn = _context.CreateConnection("RefreshTokenReader"))
-                {
-                    // Open the connection - this closes automatically in the end of the using statement. 
-                    conn.Open();
-
-                    // Call Stored Procedure on the database - this creates a new user, and returns the newly created user.
-                    user = await conn.QuerySingleOrDefaultAsync<UserEntity>("[SP_GetSingleUserByToken]",
-                        new
-                        {
-                            @Token = refreshTokenValue
-                        }, commandType: CommandType.StoredProcedure);
-                }
-
-                return user;
-            }
-            catch (System.Data.SqlClient.SqlException e)
-            {
-                throw new RepositoryNotAvailableException("The repository could not reach its destination.", e);
-            }
-            catch (Exception e)
-            {
-                throw new RepositoryNotAvailableException("An error occured in the repository.", e);
-            }
-        }
-
-        
-        // Implemented in RefreshTokenRepo
-        public async Task<IRefreshToken> GetTokenByUserAsync(IUser user)
-        {
-            try
-            {
-                IRefreshToken refreshToken = null;
-
-                // Connect to database using connectionstring defined in appsettings.json
-                using (var conn = _context.CreateConnection("RefreshTokenReader"))
-                {
-                    // Open the connection - this closes automatically in the end of the using statement. 
-                    conn.Open();
-
-                    // Call Stored Procedure on the database - this creates a new user, and returns the newly created user.
-                    refreshToken = await conn.QuerySingleOrDefaultAsync<RefreshTokenEntity>("[SP_GetTokenByUser]",
-                        new
-                        {
-                            @UserID = user.Id
-                        }, commandType: CommandType.StoredProcedure);
-                }
-
-                return refreshToken;
-            }
-            catch (System.Data.SqlClient.SqlException e)
-            {
-                throw new RepositoryNotAvailableException("The repository could not reach its destination.", e);
-            }
-            catch (Exception e)
-            {
-                throw new RepositoryNotAvailableException("An error occured in the repository.", e);
-            }
-        }
-
-
-        // Implemented in RefreshTokenRepo
-        public async Task<IUser> GetByActiveTokenAsync(string refreshTokenValue)
+        public async Task<IUser> GetByTokenAsync(string refreshTokenValue)
         {
             try
             {
@@ -367,38 +300,106 @@ namespace PasswordManagerAPI.Repositories
         }
 
 
-        // Implemented in RefreshTokenRepo
-        public async Task<bool> RevokeAccessTokenAsync(IRefreshToken refreshToken)
-        {
-            try
-            {
-                bool tokenReplacementSuccess = false;
+        //// Implemented in RefreshTokenRepo
+        //public async Task<IRefreshToken> GetTokenByUserAsync(IUser user)
+        //{
+        //    try
+        //    {
+        //        IRefreshToken refreshToken = null;
 
-                // Connect to database using connectionstring defined in appsettings.json
-                using (var conn = _context.CreateConnection("RefreshTokenRevoker"))
-                {
-                    // Open the connection - this closes automatically in the end of the using statement. 
-                    conn.Open();
+        //        // Connect to database using connectionstring defined in appsettings.json
+        //        using (var conn = _context.CreateConnection("RefreshTokenReader"))
+        //        {
+        //            // Open the connection - this closes automatically in the end of the using statement. 
+        //            conn.Open();
 
-                    // Call Stored Procedure on the database - this creates a new user, and returns the newly created user.
-                    tokenReplacementSuccess = await conn.ExecuteScalarAsync<bool>("[SP_RevokeRefreshToken]",
-                        new
-                        {
-                            @Token = refreshToken.Token
-                        }, commandType: CommandType.StoredProcedure);
-                }
+        //            // Call Stored Procedure on the database - this creates a new user, and returns the newly created user.
+        //            refreshToken = await conn.QuerySingleOrDefaultAsync<RefreshTokenEntity>("[SP_GetTokenByUser]",
+        //                new
+        //                {
+        //                    @UserID = user.Id
+        //                }, commandType: CommandType.StoredProcedure);
+        //        }
 
-                return tokenReplacementSuccess;
+        //        return refreshToken;
+        //    }
+        //    catch (System.Data.SqlClient.SqlException e)
+        //    {
+        //        throw new RepositoryNotAvailableException("The repository could not reach its destination.", e);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new RepositoryNotAvailableException("An error occured in the repository.", e);
+        //    }
+        //}
 
-            }
-            catch (System.Data.SqlClient.SqlException e)
-            {
-                throw new RepositoryNotAvailableException("The repository could not reach its destination.", e);
-            }
-            catch (Exception e)
-            {
-                throw new RepositoryNotAvailableException("An error occured in the repository.", e);
-            }
-        }
+
+        //// Implemented in RefreshTokenRepo
+        //public async Task<IUser> GetByTokenAsync(string refreshTokenValue)
+        //{
+        //    try
+        //    {
+        //        IUser user = null;
+
+        //        // Connect to database using connectionstring defined in appsettings.json
+        //        using (var conn = _context.CreateConnection("RefreshTokenReader"))
+        //        {
+        //            // Open the connection - this closes automatically in the end of the using statement. 
+        //            conn.Open();
+
+        //            // Call Stored Procedure on the database - this creates a new user, and returns the newly created user.
+        //            user = await conn.QuerySingleOrDefaultAsync<UserEntity>("[SP_GetSingleUserByToken]",
+        //                new
+        //                {
+        //                    @Token = refreshTokenValue
+        //                }, commandType: CommandType.StoredProcedure);
+        //        }
+
+        //        return user;
+        //    }
+        //    catch (System.Data.SqlClient.SqlException e)
+        //    {
+        //        throw new RepositoryNotAvailableException("The repository could not reach its destination.", e);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new RepositoryNotAvailableException("An error occured in the repository.", e);
+        //    }
+        //}
+
+
+        //// Implemented in RefreshTokenRepo
+        //public async Task<bool> RevokeAccessTokenAsync(IRefreshToken refreshToken)
+        //{
+        //    try
+        //    {
+        //        bool tokenReplacementSuccess = false;
+
+        //        // Connect to database using connectionstring defined in appsettings.json
+        //        using (var conn = _context.CreateConnection("RefreshTokenRevoker"))
+        //        {
+        //            // Open the connection - this closes automatically in the end of the using statement. 
+        //            conn.Open();
+
+        //            // Call Stored Procedure on the database - this creates a new user, and returns the newly created user.
+        //            tokenReplacementSuccess = await conn.ExecuteScalarAsync<bool>("[SP_RevokeRefreshToken]",
+        //                new
+        //                {
+        //                    @Token = refreshToken.Token
+        //                }, commandType: CommandType.StoredProcedure);
+        //        }
+
+        //        return tokenReplacementSuccess;
+
+        //    }
+        //    catch (System.Data.SqlClient.SqlException e)
+        //    {
+        //        throw new RepositoryNotAvailableException("The repository could not reach its destination.", e);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new RepositoryNotAvailableException("An error occured in the repository.", e);
+        //    }
+        //}
     }
 }

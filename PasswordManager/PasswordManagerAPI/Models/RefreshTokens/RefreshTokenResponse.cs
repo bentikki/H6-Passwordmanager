@@ -8,13 +8,11 @@ namespace PasswordManagerAPI.Models.RefreshTokens
 {
     public class RefreshTokenResponse
     {
-        public IRefreshToken RefreshToken { get; }
-        public string AccessToken { get; }
+        public AccessRefreshTokenSet TokenSet { get; }
 
-        public RefreshTokenResponse(IRefreshToken refreshToken, string accessToken)
+        public RefreshTokenResponse(AccessRefreshTokenSet tokenSet)
         {
-            RefreshToken = refreshToken;
-            AccessToken = accessToken;
+            TokenSet = tokenSet;
         }
     }
 }

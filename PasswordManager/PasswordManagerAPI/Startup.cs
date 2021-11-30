@@ -41,6 +41,7 @@ namespace PasswordManagerAPI
 
             // Configure repositories to be used in DI.
             services.AddScoped<IUserRepository, UserRepositoryDB>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepositoryDB>();
 
             // Configure DI for logic services.
             services.AddScoped<IHashingService>(s => HashingServiceFactory.GetHashingService(this.ConvertSpacedHexToByteArray(Configuration.GetValue<string>("AppSettings:PepperStringValue"))));
@@ -57,6 +58,7 @@ namespace PasswordManagerAPI
 
             // Configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         }
 
         // configure the HTTP request pipeline

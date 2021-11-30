@@ -22,10 +22,14 @@ namespace PasswordManagerAPI.Services
 
         Task<IUser> GetUserByIdAsync(int id);
         Task<IUser> GetUserByUsernameAsync(string username);
+        Task<IUser> GetUserByTokenAsync(string token);
         Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest authenticateRequest);
-        Task<AuthenticateResponse> RefreshAccessTokenAsync(string token);
-        Task RevokeAccessTokenAsync(string token);
+
         Task<IUser> CreateUserAsync(CreateUserRequest createUserRequest);
         Task<bool> DeleteUserAsync(IUser userToBeDeleted);
+
+
+        //Task<AuthenticateResponse> RefreshAccessTokenAsync(string token);
+        //Task RevokeAccessTokenAsync(string token);
     }
 }

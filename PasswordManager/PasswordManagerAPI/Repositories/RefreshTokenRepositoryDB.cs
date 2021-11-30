@@ -2,6 +2,7 @@
 using PasswordManagerAPI.Contexts;
 using PasswordManagerAPI.CustomExceptions;
 using PasswordManagerAPI.Entities;
+using PasswordManagerAPI.Models.RefreshTokens;
 using PasswordManagerAPI.Models.Users;
 using PasswordManagerAPI.TokenHandlers.RefreshTokens;
 using System;
@@ -66,7 +67,7 @@ namespace PasswordManagerAPI.Repositories
         /// </summary>
         /// <param name="user">The IUser entity owning the needed RefreshToken</param>
         /// <returns>IRefresh token entity active from the provided IUser</returns>
-        public async Task<IRefreshToken> GetTokenByUserAsync(IUser user)
+        public async Task<IRefreshToken> GetByUserAsync(IUser user)
         {
             try
             {

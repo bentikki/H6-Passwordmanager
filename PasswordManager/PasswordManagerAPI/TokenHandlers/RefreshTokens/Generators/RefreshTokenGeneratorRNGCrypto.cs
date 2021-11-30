@@ -1,4 +1,5 @@
 ﻿using PasswordManagerAPI.Entities;
+using PasswordManagerAPI.Models.RefreshTokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,11 @@ namespace PasswordManagerAPI.TokenHandlers.RefreshTokens.Generators
         /// <returns>Newly generated refresh token.</returns>
         public IRefreshToken GenerateRefreshToken(double ttlInDays)
         {
-            // generate token that is valid for 7 days
+            // generate token that is valid for the amount of days set in ttlInDays
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[64];
             rngCryptoServiceProvider.GetBytes(randomBytes);
+
             IRefreshToken refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(randomBytes),

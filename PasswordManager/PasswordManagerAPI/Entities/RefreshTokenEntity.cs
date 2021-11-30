@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Microsoft.EntityFrameworkCore;
+using PasswordManagerAPI.Models.RefreshTokens;
 using PasswordManagerAPI.TokenHandlers.RefreshTokens;
 using System;
 using System.Text.Json.Serialization;
@@ -27,7 +28,5 @@ namespace PasswordManagerAPI.Entities
         public bool IsRevoked => Revoked != null;
         [Write(false)]
         public bool IsActive => !IsRevoked && !IsExpired;
-
-        public int UserID { get => this.FK_Users_Id; }
     }
 }

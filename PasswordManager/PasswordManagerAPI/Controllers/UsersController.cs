@@ -67,48 +67,48 @@ namespace PasswordManagerAPI.Controllers
             }
         }
 
-        [AllowAnonymous]
-        [HttpPost("refresh-token")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AuthenticateResponse>> RefreshToken()
-        {
-            try
-            {
-                string refreshToken = Request.Cookies["refreshToken"];
-                AuthenticateResponse response = await _userService.RefreshAccessTokenAsync(refreshToken);
-                setTokenCookie("refreshToken", response.RefreshToken);
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                string errorMessage = e.Message;
-                return Unauthorized(new ErrorResponse(errorMessage));
-            }
-        }
+        //[AllowAnonymous]
+        //[HttpPost("refresh-token")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<ActionResult<AuthenticateResponse>> RefreshToken()
+        //{
+        //    try
+        //    {
+        //        string refreshToken = Request.Cookies["refreshToken"];
+        //        AuthenticateResponse response = await _userService.RefreshAccessTokenAsync(refreshToken);
+        //        setTokenCookie("refreshToken", response.RefreshToken);
+        //        return Ok(response);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string errorMessage = e.Message;
+        //        return Unauthorized(new ErrorResponse(errorMessage));
+        //    }
+        //}
 
-        [HttpPost("revoke-token")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> RevokeToken(RevokeTokenRequest model)
-        {
-            try
-            {
-                // accept refresh token in request body or cookie
-                string token = model.Token ?? Request.Cookies["refreshToken"];
+        //[HttpPost("revoke-token")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<ActionResult> RevokeToken(RevokeTokenRequest model)
+        //{
+        //    try
+        //    {
+        //        // accept refresh token in request body or cookie
+        //        string token = model.Token ?? Request.Cookies["refreshToken"];
 
-                if (string.IsNullOrEmpty(token)) throw new ArgumentException("Token is required", nameof(model));
+        //        if (string.IsNullOrEmpty(token)) throw new ArgumentException("Token is required", nameof(model));
 
-                await _userService.RevokeAccessTokenAsync(token);
-                return Ok();
+        //        await _userService.RevokeAccessTokenAsync(token);
+        //        return Ok();
 
-            }
-            catch (Exception e)
-            {
-                string errorMessage = e.Message;
-                return BadRequest(new ErrorResponse(errorMessage));
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string errorMessage = e.Message;
+        //        return BadRequest(new ErrorResponse(errorMessage));
+        //    }
+        //}
 
 
 
