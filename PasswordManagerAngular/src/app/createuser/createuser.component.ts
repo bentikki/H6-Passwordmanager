@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -73,7 +74,7 @@ export class CreateuserComponent implements OnInit {
                 this.router.navigate(['/login']);
               },
               error: error => {
-                  this.error = "En bruger med den email findes allerede.";
+                  this.error = error;
                   this.loading = false;
               }
           });

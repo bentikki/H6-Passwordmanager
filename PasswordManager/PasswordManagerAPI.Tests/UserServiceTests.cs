@@ -15,7 +15,7 @@ namespace PasswordManagerAPI.Tests
         // Used to build the structure supported in the Core. This is done so the DI service can be used.
         private readonly IServiceProvider _startup;
         private readonly IUserService _userService;
-        private readonly IRefreshTokenService _refreshTokenService;
+
         private readonly string _validTestPassword;
         private readonly string _validTestUsername;
 
@@ -24,7 +24,7 @@ namespace PasswordManagerAPI.Tests
             this._startup = Program.CreateHostBuilder(new string[] { }).Build().Services;
             this._userService = _startup.GetRequiredService<IUserService>();
             this._validTestUsername = "TestUserToCreateAndDelete1@zbc.dk";
-            this._validTestPassword = "testpasswoweqdasdqweqweqwesadsafqwweqweqweqwerd";
+            this._validTestPassword = "testpasswoweqdasdgytiewradsafqwsada12e12442weqweqjgjtird";
         }
 
 
@@ -85,14 +85,14 @@ namespace PasswordManagerAPI.Tests
             IUser tempUser = await _userService.CreateUserAsync(createUserRequest);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _userService.CreateUserAsync(createUserRequest));
+            await Assert.ThrowsAsync<ArgumentException>(() => _userService.CreateUserAsync(createUserRequest));
 
             // Cleanup
             await _userService.DeleteUserAsync(tempUser);
         }
 
         [Theory]
-        [InlineData(" ")]
+        [InlineData("    ")]
         [InlineData("teststringwithoutAt")]
         [InlineData("test@mail.com")]
         [InlineData("test@zbc.com")]
@@ -181,7 +181,7 @@ namespace PasswordManagerAPI.Tests
             IUser user = await _userService.CreateUserAsync(createUserRequest);
 
             AuthenticateRequest authenticateRequest = new AuthenticateRequest();
-            authenticateRequest.Username = _validTestUsername + "TnvalidAddition";
+            authenticateRequest.Username = "TnvalidAddition" + _validTestUsername;
             authenticateRequest.Password = _validTestPassword;
 
             // Act & Assert
@@ -220,16 +220,16 @@ namespace PasswordManagerAPI.Tests
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(int.MinValue)]
-        public async Task DeleteUserAsync_InvalidUserID_ShouldThrowArgumentNullException(int invalidUserID)
+        public async Task DeleteUserAsync_InvalidUserID_ShouldThrowArgumentException(int invalidUserID)
         {
             // Arrange
             CreateUserRequest createUserRequest = new CreateUserRequest();
             createUserRequest.Username = _validTestUsername + "invalidtest";
-            createUserRequest.Password = _validTestPassword + "invalidtest"; ;
+            createUserRequest.Password = _validTestPassword + "invalidtest";
             createUserRequest.Id = invalidUserID;
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _userService.DeleteUserAsync(createUserRequest));
+            await Assert.ThrowsAsync<ArgumentException>(() => _userService.DeleteUserAsync(createUserRequest));
         }
 
 
@@ -363,8 +363,6 @@ namespace PasswordManagerAPI.Tests
         }
 
         [Theory]
-        [InlineData("   ")]
-        [InlineData(" ")]
         [InlineData(null)]
         public async Task GetByUsernameAsync_InvalidFormat_ShouldThrowArgumentNullException(string invalidinput)
         {
@@ -375,14 +373,23 @@ namespace PasswordManagerAPI.Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => _userService.GetUserByUsernameAsync(usernameToFetch));
         }
 
+        [Theory]
+        [InlineData("   ")]
+        [InlineData(" ")]
+        public async Task GetByUsernameAsync_InvalidFormat_ShouldThrowArgumentException(string invalidinput)
+        {
+            // Arrange
+            string usernameToFetch = invalidinput;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _userService.GetUserByUsernameAsync(usernameToFetch));
+        }
+
         #endregion GetByUsernameAsync
 
         #region GetUserByTokenAsync
 
         [Theory]
-        [InlineData("")]
-        [InlineData("   ")]
-        [InlineData(" ")]
         [InlineData(null)]
         public async Task GetUserByTokenAsync_InvalidFormat_ShouldThrowArgumentNullException(string invalidinput)
         {
@@ -391,6 +398,19 @@ namespace PasswordManagerAPI.Tests
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(() => _userService.GetUserByTokenAsync(tokenToFetch));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData(" ")]
+        public async Task GetUserByTokenAsync_InvalidFormat_ShouldThrowArgumentException(string invalidinput)
+        {
+            // Arrange
+            string tokenToFetch = invalidinput;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _userService.GetUserByTokenAsync(tokenToFetch));
         }
 
         #endregion GetUserByTokenAsync

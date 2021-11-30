@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using PasswordManagerAPI.Entities;
+using PasswordManagerAPI.Models.RefreshTokens;
 
 namespace PasswordManagerAPI.Models.Users
 {
@@ -11,9 +12,20 @@ namespace PasswordManagerAPI.Models.Users
         public string LastName { get; set; }
         public string Username { get; set; }
         public string JwtToken { get; set; }
+        public AccessRefreshTokenSet TokenSet { get; }
 
         [JsonIgnore] // refresh token is returned in http only cookie
         public string RefreshToken { get; set; }
+
+        public AuthenticateResponse(UserEntity user, AccessRefreshTokenSet tokenSet)
+        {
+            //LoggedInUser = user;
+            Id = user.Id;
+            FirstName = "temp";
+            LastName = "temp";
+            Username = user.Username;
+            TokenSet = tokenSet;
+        }
 
         public AuthenticateResponse(UserEntity user, string jwtToken, string refreshToken)
         {
