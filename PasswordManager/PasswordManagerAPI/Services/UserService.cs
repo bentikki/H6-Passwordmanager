@@ -15,7 +15,6 @@ namespace PasswordManagerAPI.Services
 {
     public class UserService : IUserService
     {
-        private readonly AppSettings _appSettings;
         private readonly IUserRepository _userRepository;
         private readonly IRefreshTokenService _refreshTokenService;
 
@@ -23,15 +22,12 @@ namespace PasswordManagerAPI.Services
 
 
         public UserService(
-            IOptions<AppSettings> appSettings,
             IUserRepository userRepository,
             IRefreshTokenService refreshTokenService,
             IHashingService hashingService)
         {
-            _appSettings = appSettings.Value;
             _userRepository = userRepository;
             _refreshTokenService = refreshTokenService;
-
             _hashingService = hashingService;
         }
 
@@ -71,7 +67,7 @@ namespace PasswordManagerAPI.Services
             IUser existingUser = await this.GetUserByUsernameAsync(createUserRequest.Username);
             if(existingUser != null)
             {
-                throw new ArgumentException("A user with the provided username allready exist.", nameof(createUserRequest.Username));
+                throw new ArgumentException($"A user with the provided username {createUserRequest.Username} already exist.", nameof(createUserRequest.Username));
             }
 
             // Create passwordhash using IHashingService

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordClassLibrary.Validation
+namespace PasswordClassLibrary.Validation.ValidationRules
 {
     /// <summary>
     /// A ruleset containing a list of rules to validate against.

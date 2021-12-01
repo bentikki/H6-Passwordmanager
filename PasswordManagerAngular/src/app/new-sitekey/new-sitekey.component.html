@@ -1,0 +1,46 @@
+<div (click)="onShowButtonClick()" class="background-container">
+    <div  class="addnew-button">
+        <i class="fas fa-plus addnew-icon"></i>
+    </div>
+</div>
+
+<div *ngIf="formShown" class="row addnew-form-background">
+    <div class="col-12 addnew-form-container">
+
+        <form [formGroup]="createNewForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <input type="text" formControlName="sitename" placeholder="Navn på siden" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.sitename.errors }" />
+                <div *ngIf="submitted && f.sitename.errors" class="invalid-feedback">
+                    <div *ngIf="f.sitename.errors.required">Sidens navn skal udfyldes</div>
+                    <div *ngIf="f.sitename.errors.minlength">Sidens navn skal minimum være 2 karaktere langt</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" formControlName="siteusername" placeholder="Brugernavn til siden" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.siteusername.errors }" />
+                <div *ngIf="submitted && f.siteusername.errors" class="invalid-feedback">
+                    <div *ngIf="f.siteusername.errors.required">Brugernavn skal udfyldes</div>
+                    <div *ngIf="f.siteusername.errors.minlength">Brugernavn skal minimum være 2 karaktere langt</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" formControlName="sitepassword" placeholder="Password til siden" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.sitepassword.errors }" />
+                <div *ngIf="submitted && f.sitepassword.errors" class="invalid-feedback">
+                    <div *ngIf="f.sitepassword.errors.required">Password skal udfyldes</div>
+                    <div *ngIf="f.sitepassword.errors.minlength">Password skal minimum være 2 karaktere langt</div>
+                </div>
+            </div>
+            
+            <!-- Login button -->
+            <div class="button-container col-12 col-md-10 offset-md-1">
+                <button [disabled]="loading" class="btn btn-primary btn-block">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Opret nøgle
+                </button>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0 validation-popup">{{error}}</div>
+
+        </form>
+
+    </div>
+</div>

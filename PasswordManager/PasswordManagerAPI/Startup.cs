@@ -45,11 +45,11 @@ namespace PasswordManagerAPI
             
             // Configure token generators
             services.AddScoped<IAccessTokenHandler>(s => AccessTokenHandlerFactory.GetAccessTokenHandlerJWT(
-                    Configuration.GetValue<string>("AppSettings:Secret"),
-                    Configuration.GetValue<double>("AppSettings:AccessTokenTTLinMinutes")
+                        Configuration.GetValue<string>("AppSettings:Secret"),
+                        Configuration.GetValue<double>("AppSettings:AccessTokenTTLinMinutes")
                     ));
             services.AddScoped<IRefreshTokenHandler>(s => RefreshTokenHandlerFactory.GetRefreshTokenHandler(
-                    Configuration.GetValue<double>("AppSettings:RefreshTokenTTLinDays")
+                        Configuration.GetValue<double>("AppSettings:RefreshTokenTTLinDays")
                     ));
 
             // Set rules for the Validator.
@@ -58,10 +58,12 @@ namespace PasswordManagerAPI
             // Configure repositories to be used in DI.
             services.AddScoped<IUserRepository, UserRepositoryDB>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepositoryDB>();
+            services.AddScoped<ISitekeyRepository, SitekeyRepositoryDB>();
 
             // Configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<ISitekeyService, SitekeyService>();
         }
 
         // configure the HTTP request pipeline
@@ -136,6 +138,34 @@ namespace PasswordManagerAPI
                 {
                     new NoNullRule(),
                     new MinValueRule(1)
+                }
+            ));
+
+            Validator.AddRuleSet(
+                new ValidationRuleSet("Sitekey-Sitename", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new NoEmptyStringRule(),
+                    new MinLengthRule(2),
+                    new MaxLengthRule(200),
+                }
+            ));
+            Validator.AddRuleSet(
+                new ValidationRuleSet("Sitekey-LoginName", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new NoEmptyStringRule(),
+                    new MinLengthRule(2),
+                    new MaxLengthRule(200),
+                }
+            ));
+            Validator.AddRuleSet(
+                new ValidationRuleSet("Sitekey-LoginPassword", new List<IValidationRule>()
+                {
+                    new NoNullRule(),
+                    new NoEmptyStringRule(),
+                    new MinLengthRule(2),
+                    new MaxLengthRule(200),
                 }
             ));
         }

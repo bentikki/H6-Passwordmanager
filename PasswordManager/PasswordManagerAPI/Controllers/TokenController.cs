@@ -51,6 +51,7 @@ namespace PasswordManagerAPI.Controllers
         [HttpPost("revoke")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> RevokeToken(RevokeTokenRequest model)
         {
             try

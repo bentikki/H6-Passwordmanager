@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PasswordClassLibrary.Validation.ValidationRules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace PasswordClassLibrary.Validation
     /// </summary>
     public static class Validator
     {
+        static Object thisLock = new Object();
         static private List<ValidationRuleSet> validationRuleSets = new List<ValidationRuleSet>();
 
         /// <summary>
@@ -20,9 +22,14 @@ namespace PasswordClassLibrary.Validation
         static public void AddRuleSet(ValidationRuleSet validationRuleSet)
         {
             // If the ruleset allready exists - replace it.
-            if (validationRuleSets.Any(x => x.Name == validationRuleSet.Name))
+            lock (thisLock)
             {
-                validationRuleSets.Remove(validationRuleSets.Single(x => x.Name == validationRuleSet.Name));
+                ValidationRuleSet validationRuleSetToReplace = validationRuleSets.SingleOrDefault(x => x.Name == validationRuleSet.Name);
+
+                if (validationRuleSetToReplace != null)
+                {
+                    validationRuleSets.RemoveAll(x => x.Name == validationRuleSet.Name);
+                }
             }
 
             // Add the new ruleset to the validator.

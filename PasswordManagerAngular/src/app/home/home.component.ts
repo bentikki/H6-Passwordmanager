@@ -1,9 +1,7 @@
 ﻿import { Component } from '@angular/core';
+import { Sitekey } from '@app/_models';
+import { SitekeyService } from '@app/_services';
 import { first } from 'rxjs/operators';
-
-import { User } from '@app/_models';
-import { UserService } from '@app/_services';
-
 
 @Component({
     selector: 'app-home',
@@ -11,11 +9,28 @@ import { UserService } from '@app/_services';
     styleUrls: ['./home.component.less']
   })
 export class HomeComponent {
-    loading = false;
-    users: User[];
+    usersSiteKeys: Sitekey[];
+    loading: boolean = false;
 
-    constructor(private userService: UserService) { }
+    constructor(
+      private sitekeyService: SitekeyService) 
+    { 
+
+    }
 
     ngOnInit() {
+      this.loadSitekeys();
+    }
+
+    newSiteKeyCreated(sitekey: Sitekey){
+      this.loadSitekeys();
+    }
+
+    private loadSitekeys(){
+      this.loading = true;
+      this.sitekeyService.getAll().pipe(first()).subscribe(sitekeys => {
+          this.loading = false;
+          this.usersSiteKeys = sitekeys;
+      });
     }
 }

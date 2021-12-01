@@ -57,7 +57,7 @@ namespace PasswordManagerAPI.Services
                 throw new ArgumentException("The new token could not be set.", nameof(token));
             }
 
-            return new RefreshTokenResponse(accessRefreshTokenSet);
+            return new RefreshTokenResponse(accessRefreshTokenSet, tokenOwner);
         }
 
         /// <summary>
