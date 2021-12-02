@@ -2,6 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -14,23 +15,26 @@ import { PasswordGeneratorComponent } from './password-generator/password-genera
 import { CreateuserComponent } from './createuser/createuser.component';
 import { PasswordtogglerComponent } from './passwordtoggler/passwordtoggler.component';;
 import { NewSitekeyComponent } from './new-sitekey/new-sitekey.component'
-
+;
+import { GeneratePasswordComponent } from './generate-password/generate-password.component'
 @NgModule({
     imports: [
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        ClipboardModule
     ],
     declarations: [
         AppComponent,
         HomeComponent,
-        LoginComponent
+        LoginComponent,
+        PasswordGeneratorComponent,
+        CreateuserComponent,
+        PasswordtogglerComponent,
+        NewSitekeyComponent
 ,
-        PasswordGeneratorComponent ,
-        CreateuserComponent ,
-        PasswordtogglerComponent ,
-        NewSitekeyComponent ],
+        GeneratePasswordComponent    ],
     providers: [
         { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

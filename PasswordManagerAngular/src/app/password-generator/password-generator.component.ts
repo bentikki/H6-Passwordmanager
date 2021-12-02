@@ -7,11 +7,28 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PasswordGeneratorComponent implements OnInit {
 
+  formShown:boolean = false;
+  generatedPasswordValue: string;
+  showCustomSettings: boolean = false;
 
-  
   constructor() { }
 
   ngOnInit(): void {
+    // Test
+    this.formShown = true;
+  }
+
+
+  onShowButtonClick(){
+    if(this.formShown){
+      this.formShown = false;
+    }else{
+      this.formShown = true;
+    }
+  }
+
+  onShowCustomSettings(showSettings: boolean){
+    this.showCustomSettings = showSettings;
   }
 
 }

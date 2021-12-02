@@ -25,14 +25,6 @@
     }
 }
 
-.new-sitekey-container {
-    position: absolute;
-    z-index: 100;
-    top:26vh;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
 
 .single-sitekey-container {
     color: #232323;
@@ -45,8 +37,9 @@
         position: relative;
         color: #ffffff;
         font-weight: bold;
-        width: 50px;
+        width: 100%;
         height: 50px;
+        max-width: 50px;
         border-radius: 100%;
         background-color: #006e8c;
         >span{
@@ -59,6 +52,10 @@
         }
     }
 
+    .sitekey-con {
+        cursor: pointer;
+    }
+
 }
 .single-sitekey-container:nth-child(even) {
     background-color: #f7f6f6;
@@ -67,4 +64,29 @@
 
 .single-sitekey-headers {
     padding-bottom: 20px;
+}
+
+
+
+.new-sitekey-container {
+    position: absolute;
+    z-index: 100;
+    top:26vh;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.password-generator-container {
+    position: absolute;
+    z-index: 100;
+    right: 1vw;
+    top:23vh;
+}
+
+
+.alert-container {
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

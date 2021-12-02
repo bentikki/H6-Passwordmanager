@@ -1,6 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import { Sitekey } from '@app/_models';
 import { SitekeyService } from '@app/_services';
+import { ClipboardService } from 'ngx-clipboard';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +14,8 @@ export class HomeComponent {
     loading: boolean = false;
 
     constructor(
-      private sitekeyService: SitekeyService) 
+      private sitekeyService: SitekeyService,
+      private _clipboardService: ClipboardService) 
     { 
 
     }
@@ -33,4 +35,17 @@ export class HomeComponent {
           this.usersSiteKeys = sitekeys;
       });
     }
+
+    alertShow : boolean = false;
+    alertText : string; 
+
+    copyText(text: string, valueName: string){
+      this._clipboardService.copy(text);
+      this.alertText = valueName + " kopiret!";
+      this.alertShow = true;
+      setTimeout(() => { this.alertShow = false; }, 1000);
+    }
+
+    
+
 }
