@@ -15,10 +15,6 @@ export class SitekeyService {
         private encryptionService: EncryptionService
         ) { }
 
-    getAllOld() {
-        return this.http.get<Sitekey[]>(`${environment.apiUrl}/v1/Sitekeys`);
-    }
-
     getAll() {
         let decryptedSitekeys : Sitekey[] = [];
         return this.http.get<Sitekey[]>(`${environment.apiUrl}/v1/Sitekeys`)

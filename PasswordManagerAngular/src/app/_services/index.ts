@@ -2,3 +2,4 @@
 export * from './sitekey.service';
 export * from './encryption.service';
 export * from './hashing.service';
+export * from './generatepassword.service';
