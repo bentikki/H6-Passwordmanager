@@ -22,6 +22,7 @@ namespace PasswordManagerAPI.Authorization
         public async Task Invoke(HttpContext context, IUserService userService, IAccessTokenHandler accessTokenHandler)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
             string userId = accessTokenHandler.GetIdFromToken(token);
             if (userId != null)
             {

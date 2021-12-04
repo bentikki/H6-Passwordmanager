@@ -11,9 +11,7 @@ namespace PasswordManagerAPI.Services
 {
     public interface ISitekeyService
     {
-        Task<ISitekey> GetSitekeyByIdAsync(int id);
         Task<ISitekey> CreateSitekeyAsync(CreateSitekeyRequest createSitekeyRequest, IUser user);
-        Task<bool> DeleteSitekeyAsync(ISitekey sitekey);
         Task<IEnumerable<ISitekey>> GetAllSitekeysByUserAsync(IUser user);
     }
 }

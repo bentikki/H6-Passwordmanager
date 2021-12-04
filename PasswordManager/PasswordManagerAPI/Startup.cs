@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordClassLibrary.Hashing;
+using PasswordClassLibrary.RandomStringGenerating;
+using PasswordClassLibrary.RandomStringGenerating.GenerationMethods;
 using PasswordClassLibrary.Validation;
 using PasswordClassLibrary.Validation.ValidationRules;
 using PasswordManagerAPI.Authorization;
@@ -42,6 +44,7 @@ namespace PasswordManagerAPI
 
             // Configure DI for logic services.
             services.AddScoped<IHashingService>(s => HashingServiceFactory.GetHashingService(this.ConvertSpacedHexToByteArray(Configuration.GetValue<string>("AppSettings:PepperStringValue"))));
+            services.AddScoped<IRandomStringGenerator>(s => RandomStringGeneratorFactory.CreateGenerator(new RandomStringGeneratorBasic()));
             
             // Configure token generators
             services.AddScoped<IAccessTokenHandler>(s => AccessTokenHandlerFactory.GetAccessTokenHandlerJWT(

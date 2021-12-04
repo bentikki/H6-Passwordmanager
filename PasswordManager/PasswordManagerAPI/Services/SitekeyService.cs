@@ -51,15 +51,6 @@ namespace PasswordManagerAPI.Services
             return usersSitekeys;
         }
 
-        public Task<bool> DeleteSitekeyAsync(ISitekey sitekey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ISitekey> GetSitekeyByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         private void ValidateSitekey(CreateSitekeyRequest createSitekeyRequest)
         {

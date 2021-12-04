@@ -7,8 +7,9 @@ namespace PasswordManagerAPI.Models.GeneratePassword
 {
     public class GeneratePasswordRequest
     {
-        public bool IncludeLetters { get; set; }
-        public bool IncludeNumbers { get; set; }
-        public bool IncludeSigns { get; set; }
+        public bool Customsettings { get; set; }
+        public bool Letters { get; set; }
+        public bool Numbers { get; set; }
+        public bool Signs { get; set; }
     }
 }
