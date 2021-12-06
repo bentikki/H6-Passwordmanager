@@ -10,10 +10,10 @@ namespace PasswordManagerAPI.Repositories.RepositoryBase
     /// Interface to hold contract for repositories with write access.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity to used by the repository</typeparam>
-    public interface IRepositoryWrite<TEntity>
-    {
-        Task<TEntity> CreateAsync(TEntity entity);
-        Task<TEntity> UpdateAsync(TEntity entity);
-        Task<bool> DeleteAsync(TEntity entity);
-    }
+    //public interface IRepositoryWrite<TEntity>
+    //{
+    //    Task<TEntity> CreateAsync(TEntity entity);
+    //    Task<TEntity> UpdateAsync(TEntity entity);
+    //    Task<bool> DeleteAsync(TEntity entity);
+    //}
 }

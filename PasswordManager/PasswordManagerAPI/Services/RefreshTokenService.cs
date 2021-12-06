@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Services
 {
+    /// <summary>
+    /// Service used to manipulate RefreshToken data.
+    /// </summary>
     public class RefreshTokenService : IRefreshTokenService
     {
 
@@ -19,6 +22,12 @@ namespace PasswordManagerAPI.Services
         private readonly IAccessTokenHandler _accessTokenHandler;
         private readonly IRefreshTokenHandler _refreshTokenHandler;
 
+        /// <summary>
+        /// Service used to manipulate RefreshToken data.
+        /// </summary>
+        /// <param name="refreshTokenRepository">IRefreshTokenRepository used while manipulating refreshtoken entities.</param>
+        /// <param name="accessTokenHandler">IAccessTokenHandler used to generate and validate access tokens.</param>
+        /// <param name="refreshTokenHandler">IRefreshTokenHandler used to generate token values used in refresh tokens.</param>
         public RefreshTokenService(
             IRefreshTokenRepository refreshTokenRepository,
             IAccessTokenHandler accessTokenHandler,
@@ -104,6 +113,12 @@ namespace PasswordManagerAPI.Services
             await this._refreshTokenRepository.RevokeAccessTokenAsync(oldRefreshToken);
         }
 
+        /// <summary>
+        /// Set a the provided refresh token for the provided user.
+        /// </summary>
+        /// <param name="refreshToken">RefreshToken to connect to the provided user.</param>
+        /// <param name="user">User to connect to the provided refreshtoken</param>
+        /// <returns>True if the refreshtoken and user could be connected, false if not.</returns>
         public async Task<bool> SetNewRefreshTokenForUserAsync(IRefreshToken refreshToken, IUser user)
         {
             bool tokenSatSuccessfully = await this._refreshTokenRepository.SetNewRefreshTokenForUserAsync(refreshToken, user);

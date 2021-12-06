@@ -7,9 +7,15 @@ using PasswordManagerAPI.Services;
 using System.Threading.Tasks;
 using System.Net.Mime;
 using PasswordManagerAPI.Models;
+using PasswordManagerAPI.CustomExceptions;
+using PasswordClassLibrary.Logging;
 
 namespace PasswordManagerAPI.Controllers
 {
+    /// <summary>
+    /// Controller handling the logic behind the /users API endpoint.
+    /// Allows for manipulation of users.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("v1/[controller]")]
@@ -17,12 +23,23 @@ namespace PasswordManagerAPI.Controllers
     {
         private IUserService _userService;
 
+        /// <summary>
+        /// Controller handling the logic behind the /users API endpoint.
+        /// Allows for manipulation of users.
+        /// </summary>
+        /// <param name="userService">IUserService set in startup</param>
         public UsersController(IUserService userService)
         {
             _userService = userService;
         }
 
-        // Reached POST: api/Users
+
+        /// <summary>
+        /// Reached by POST /Users
+        /// Creates a user entity based on the provided CreateUserRequest.
+        /// </summary>
+        /// <param name="createUserRequest">CreateUserRequest containing the data neede while creating user entities.</param>
+        /// <returns>CreateUserResponse containing the created IUsee object.</returns>
         [AllowAnonymous]
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -40,78 +57,67 @@ namespace PasswordManagerAPI.Controllers
 
                 return Ok(createUserResponse);
             }
+            catch (ArgumentException e)
+            {
+                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.MINOR, "An input was in the wrong format.", e);
+
+                string errorMessage = e.Message;
+                return BadRequest(new ErrorResponse(errorMessage));
+            }
             catch (Exception e)
             {
+                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.CRITICAL, "An unexpected error occured while generating password.", e);
+
                 string errorMessage = e.Message;
                 return BadRequest(new ErrorResponse(errorMessage));
             }
         }
 
+        /// <summary>
+        /// Reached by POST /Users/Authenticate
+        /// Autheticates a user if the provided AuthenticateRequest contains valid login information.
+        /// </summary>
+        /// <param name="authenticateRequest">AuthenticateRequest containing login information.</param>
+        /// <returns>AuthenticateResponse if the login information was valid.</returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateRequest model)
+        public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateRequest authenticateRequest)
         {
             try
             {
-                AuthenticateResponse authenticateResponse = await _userService.AuthenticateAsync(model);
+                // Authenticate the user using the IUserService.
+                AuthenticateResponse authenticateResponse = await _userService.AuthenticateAsync(authenticateRequest);
+
+                // Set the refreshToken cookie in header response
                 setTokenCookie("refreshToken", authenticateResponse.TokenSet.RefreshToken.Token);
+                
                 return Ok(authenticateResponse);
             }
-            catch (Exception e)
+            catch (ArgumentException e)
             {
+                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.MINOR, "An input was in the wrong format.", e);
+
+                string errorMessage = e.Message;
+                return BadRequest(new ErrorResponse(errorMessage));
+            }
+            catch(InvalidCredentialsException e){
+
+                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.MAJOR, "A user tried logging in with invalid credentials.", e);
+
                 string errorMessage = e.Message;
                 return Unauthorized(new ErrorResponse(errorMessage));
             }
+            catch (Exception e)
+            {
+                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.CRITICAL, "An unexpected error occured while generating password.", e);
+
+                string errorMessage = e.Message;
+                return BadRequest(new ErrorResponse(errorMessage));
+            }
         }
-
-        //[AllowAnonymous]
-        //[HttpPost("refresh-token")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<ActionResult<AuthenticateResponse>> RefreshToken()
-        //{
-        //    try
-        //    {
-        //        string refreshToken = Request.Cookies["refreshToken"];
-        //        AuthenticateResponse response = await _userService.RefreshAccessTokenAsync(refreshToken);
-        //        setTokenCookie("refreshToken", response.RefreshToken);
-        //        return Ok(response);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        string errorMessage = e.Message;
-        //        return Unauthorized(new ErrorResponse(errorMessage));
-        //    }
-        //}
-
-        //[HttpPost("revoke-token")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<ActionResult> RevokeToken(RevokeTokenRequest model)
-        //{
-        //    try
-        //    {
-        //        // accept refresh token in request body or cookie
-        //        string token = model.Token ?? Request.Cookies["refreshToken"];
-
-        //        if (string.IsNullOrEmpty(token)) throw new ArgumentException("Token is required", nameof(model));
-
-        //        await _userService.RevokeAccessTokenAsync(token);
-        //        return Ok();
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        string errorMessage = e.Message;
-        //        return BadRequest(new ErrorResponse(errorMessage));
-        //    }
-        //}
-
-
-
 
     }
 }

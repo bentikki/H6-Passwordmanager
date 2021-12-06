@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Repositories
 {
+    
+    /// <summary>
+    /// Interface contract used by Sitekey repositories.
+    /// </summary>
     public interface ISitekeyRepository
     {
-        Task<ISitekey> GetAsync(int id);
+        //Task<ISitekey> GetAsync(int id);
         Task<ISitekey> CreateAsync(ISitekey sitekey, IUser user);
         Task<IEnumerable<ISitekey>> GetAllByUserAsync(IUser user);
-        Task<bool> DeleteAsync(ISitekey sitekey);
+        //Task<bool> DeleteAsync(ISitekey sitekey);
 
     }
 }

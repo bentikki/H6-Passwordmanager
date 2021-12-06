@@ -90,8 +90,6 @@ namespace PasswordManagerAPI
                     Secure = CookieSecurePolicy.Always
                 });
 
-            // global error handler
-            //app.UseMiddleware<ErrorHandlerMiddleware>();
 
             // custom jwt auth middleware
             app.UseMiddleware<JwtMiddleware>();
@@ -101,7 +99,8 @@ namespace PasswordManagerAPI
 
 
         /// <summary>
-        /// Sets validation rules for input.
+        /// Sets validation rules for input, using the Validator functionality from PasswordClassLibrary.
+        /// The logic behind the Validator class, can be found the the Validation namespace from PasswordClassLibrary.
         /// </summary>
         private void SetValidationRuleSets()
         {

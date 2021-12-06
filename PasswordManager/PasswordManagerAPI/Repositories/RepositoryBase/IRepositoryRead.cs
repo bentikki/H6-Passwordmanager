@@ -11,9 +11,9 @@ namespace PasswordManagerAPI.Repositories.RepositoryBase
     /// </summary>
     /// <typeparam name="TEntity">The type of entity to used by the repository.</typeparam>
     /// <typeparam name="KPrimaryKeyType">The datatype of the entity's unique identifier.</typeparam>
-    public interface IRepositoryRead<TEntity, KPrimaryKeyType>
-    {
-        Task<TEntity> GetAsync(KPrimaryKeyType id);
-        Task<IEnumerable<TEntity>> GetAllAsync();
-    }
+    //public interface IRepositoryRead<TEntity, KPrimaryKeyType>
+    //{
+    //    Task<TEntity> GetAsync(KPrimaryKeyType id);
+    //    Task<IEnumerable<TEntity>> GetAllAsync();
+    //}
 }

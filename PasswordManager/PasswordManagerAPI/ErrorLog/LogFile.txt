@@ -1,0 +1,24 @@
+06-12-2021 12:01:21 : An unexpected error occured while generating password.
+
+06-12-2021 12:01:57 : An unexpected error occured while generating password.
+
+06-12-2021 12:41:36 : A input was in the wrong format.
+See Exception below:
+06-12-2021 12:41:36 : ArgumentException - Password must not be shorter than 40 characters.
+
+06-12-2021 12:41:45 : A input was in the wrong format.
+See Exception below:
+06-12-2021 12:41:45 : ArgumentException - Password must not be shorter than 40 characters.
+
+06-12-2021 12:42:01 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 12:42:01 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:01:23 : An input was in the wrong format.
+See Exception below:
+06-12-2021 13:01:23 : ArgumentException - Password must not be shorter than 40 characters.
+
+06-12-2021 13:01:37 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:01:37 : InvalidCredentialsException - Invalid credentials.
+

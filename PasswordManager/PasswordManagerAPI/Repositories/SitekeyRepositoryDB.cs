@@ -67,6 +67,13 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns all sitekeys connected to the provided IUser.
+        /// Returns empty list if the user does not own any sitekey.
+        /// Throws RepositoryNotAvailableException: If an error occurs while fetching sitekey data.
+        /// </summary>
+        /// <param name="user">IUser object of the sitekey owner.</param>
+        /// <returns>IEnumerable of ISitekey connected to the provided IUser</returns>
         public async Task<IEnumerable<ISitekey>> GetAllByUserAsync(IUser user)
         {
             try
@@ -100,16 +107,5 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
-        public Task<bool> DeleteAsync(ISitekey sitekey)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        public Task<ISitekey> GetAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

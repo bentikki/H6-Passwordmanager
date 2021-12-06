@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Repositories
 {
+    
+    /// <summary>
+    /// Interface contract used by user repositories.
+    /// </summary>
     public interface IUserRepository
     {
         Task<bool> DeleteAsync(IUser entity);

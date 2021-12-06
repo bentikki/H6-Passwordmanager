@@ -13,10 +13,17 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Repositories
 {
+    /// <summary>
+    /// Used for manipulating entity data from the connected Database
+    /// </summary>
     public class RefreshTokenRepositoryDB : IRefreshTokenRepository
     {
         private IContext _context;
 
+        /// <summary>
+        /// Used for manipulating entity data from the connected Database
+        /// </summary>
+        /// <param name="context">IContext containing the database context.</param>
         public RefreshTokenRepositoryDB(IContext context)
         {
             _context = context;
@@ -183,9 +190,5 @@ namespace PasswordManagerAPI.Repositories
             }
         }
 
-        public async Task<bool> TokenValidAsync(string token)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

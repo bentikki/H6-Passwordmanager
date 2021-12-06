@@ -9,10 +9,17 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerAPI.Services
 {
+    /// <summary>
+    /// Service used to manipulate Sitekey data.
+    /// </summary>
     public class SitekeyService : ISitekeyService
     {
         private readonly ISitekeyRepository _sitekeyRepository;
 
+        /// <summary>
+        /// Service used to manipulate Sitekey data.
+        /// </summary>
+        /// <param name="sitekeyRepository">Repository to use while manipulating sitekey entities.</param>
         public SitekeyService(ISitekeyRepository sitekeyRepository)
         {
             _sitekeyRepository = sitekeyRepository;
@@ -40,6 +47,12 @@ namespace PasswordManagerAPI.Services
             return createdSitekey;
         }
 
+        /// <summary>
+        /// Returns a list of all sitekeys connected to the provided IUser.
+        /// Returns an empty list if the user does not own any sitekey entities.
+        /// </summary>
+        /// <param name="user">The IUser object owner.</param>
+        /// <returns>List of all Sitekeys connected to the provided IUser.</returns>
         public async Task<IEnumerable<ISitekey>> GetAllSitekeysByUserAsync(IUser user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user), "The provided user must not be null.");
@@ -51,7 +64,11 @@ namespace PasswordManagerAPI.Services
             return usersSitekeys;
         }
 
-
+        /// <summary>
+        /// Helper method used to validate CreateSitekeyRequest object.
+        /// Throws exceptions if the provided CreateSitekeyRequest does not contain valid information.
+        /// </summary>
+        /// <param name="createSitekeyRequest">CreateSitekeyRequest to validate.</param>
         private void ValidateSitekey(CreateSitekeyRequest createSitekeyRequest)
         {
             Validator.ValidateAndThrow("Sitekey-Sitename", createSitekeyRequest.Sitename);
