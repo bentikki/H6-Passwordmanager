@@ -57,12 +57,12 @@ namespace PasswordManagerAPI.Tests
 
             try
             {
-                string sql = "delete from Users where Username like @TestUsername";
+                string sql = "delete from Users where Username = @TestUsername";
 
                 using (var connection = new SqlConnection("Server=172.16.57.4;Database=PasswordManagerMain;User Id=TestDeleter;Password=1Ui4B0Gm7mPUAE8C0QfY5mCoaZhxhZCcSowFR6g7AlhKyAutOvpTgG2v1m917bhAwYrAXCdVkpj21hub"))
                 {
                     connection.Open();
-                    connection.Query(sql, new { @TestUsername = "'%" + methodName + "%'"});
+                    connection.Query(sql, new { @TestUsername = methodName });
                 }
             }
             catch (Exception e)

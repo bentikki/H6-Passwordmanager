@@ -40,7 +40,7 @@ namespace PasswordClassLibrary.Logging.LoggingMethods
 
                 client.Send(errorLogMail, errorLogMail, mailSubject, stringBuilder.ToString());
             }
-            catch (Exception) { }
+            catch (Exception e) { }
         }
 
 
@@ -51,8 +51,9 @@ namespace PasswordClassLibrary.Logging.LoggingMethods
         /// <returns>SmtpClient used for mail error logging</returns>
         private SmtpClient GetErrorSmtpClient()
         {
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+            SmtpClient client = new SmtpClient("smtp.gmail.com")
             {
+                Port = 587,
                 Credentials = new NetworkCredential("BTOsignUpAPI@gmail.com", "mRBLaY9zT5hNt8FinzI8uZkT1"),
                 EnableSsl = true
             };

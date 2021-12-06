@@ -22,3 +22,35 @@ See Exception below:
 See Exception below:
 06-12-2021 13:01:37 : InvalidCredentialsException - Invalid credentials.
 
+06-12-2021 13:11:13 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:11:13 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:12:39 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:12:39 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:14:25 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:14:25 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:17:22 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:17:22 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:18:11 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:18:11 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:20:27 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:20:27 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:21:34 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:21:34 : InvalidCredentialsException - Invalid credentials.
+
+06-12-2021 13:21:40 : A user tried logging in with invalid credentials.
+See Exception below:
+06-12-2021 13:21:40 : InvalidCredentialsException - Invalid credentials.
+

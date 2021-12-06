@@ -105,7 +105,7 @@ namespace PasswordManagerAPI.Controllers
             }
             catch(InvalidCredentialsException e){
 
-                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.MAJOR, "A user tried logging in with invalid credentials.", e);
+                IncidentLogger.GetLogger.LogMessageAsync(IncidentLevel.CRITICAL, "A user tried logging in with invalid credentials.", e);
 
                 string errorMessage = e.Message;
                 return Unauthorized(new ErrorResponse(errorMessage));
