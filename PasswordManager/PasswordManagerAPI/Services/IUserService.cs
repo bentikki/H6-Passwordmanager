@@ -12,24 +12,11 @@ namespace PasswordManagerAPI.Services
     /// </summary>
     public interface IUserService
     {
-        //AuthenticateResponseOld Authenticate(AuthenticateRequest model, string ipAddress);
-        //AuthenticateResponseOld RefreshToken(string token, string ipAddress);
-        //void RevokeToken(string token, string ipAddress);
-        //IEnumerable<User> GetAll();
-        //User GetById(int id);
-
-
-
         Task<IUser> GetUserByIdAsync(int id);
         Task<IUser> GetUserByUsernameAsync(string username);
         Task<IUser> GetUserByTokenAsync(string token);
         Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest authenticateRequest);
-
         Task<IUser> CreateUserAsync(CreateUserRequest createUserRequest);
         Task<bool> DeleteUserAsync(IUser userToBeDeleted);
-
-
-        //Task<AuthenticateResponse> RefreshAccessTokenAsync(string token);
-        //Task RevokeAccessTokenAsync(string token);
     }
 }

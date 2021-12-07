@@ -17,7 +17,6 @@ namespace PasswordManagerAPI.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRefreshTokenService _refreshTokenService;
-
         private readonly IHashingService _hashingService;
 
 
@@ -208,47 +207,6 @@ namespace PasswordManagerAPI.Services
             return user;
         }
 
-
-        //public async Task<AuthenticateResponse> RefreshAccessTokenAsync(string token)
-        //{
-        //    IUser user = await this._userRepository.GetByActiveTokenAsync(token);
-
-        //    if (user == null) throw new ArgumentException("Invalid token value", nameof(token));
-
-        //    IRefreshToken oldRefreshToken = await this._userRepository.GetTokenByUserAsync(user);
-
-        //    if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)
-        //    {
-        //        throw new InvalidCredentialsException("Invalid refresh token.");
-        //    }
-
-        //    // authentication successful so generate access and refresh tokens
-        //    string accessToken = this._accessTokenHandler.GenerateToken(user.Id.ToString());
-        //    IRefreshToken refreshToken = this._refreshTokenHandler.GenerateRefreshToken();
-
-        //    // Add newly created RefreshToken to user and delete old ones.
-        //    bool newTokenSat = await this._userRepository.SetNewRefreshTokenForUserAsync(refreshToken, user);
-
-        //    if (!newTokenSat)
-        //    {
-        //        throw new ArgumentException("The new token could not be set.", nameof(token));
-        //    }
-
-        //    return new AuthenticateResponse((UserEntity)user, accessToken, refreshToken.Token);
-        //}
-
-        //public async Task RevokeAccessTokenAsync(string token)
-        //{
-        //    IUser user = await this._userRepository.GetByActiveTokenAsync(token);
-        //    IRefreshToken oldRefreshToken = await this._userRepository.GetTokenByUserAsync(user);
-
-        //    if (oldRefreshToken == null || oldRefreshToken.Revoked != null || oldRefreshToken.IsExpired)
-        //    {
-        //        throw new InvalidCredentialsException("Invalid refresh token.");
-        //    }
-
-        //    await this._userRepository.RevokeAccessTokenAsync(oldRefreshToken);
-        //}
 
     }
 }

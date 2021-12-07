@@ -6,7 +6,6 @@ namespace PasswordManagerAPI.Models.Users
 {
     public class AuthenticateResponse
     {
-        //public UserEntity LoggedInUser { get; set; }
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -14,7 +13,7 @@ namespace PasswordManagerAPI.Models.Users
         public string JwtToken { get; set; }
         public AccessRefreshTokenSet TokenSet { get; }
 
-        [JsonIgnore] // refresh token is returned in http only cookie
+        [JsonIgnore] 
         public string RefreshToken { get; set; }
 
         public AuthenticateResponse(UserEntity user, AccessRefreshTokenSet tokenSet)

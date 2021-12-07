@@ -27,7 +27,7 @@ namespace PasswordManagerAPI.Controllers
     [Route("v1/[controller]")]
     public class GeneratePasswordController : CustomControllerBase
     {
-        IRandomStringGenerator _randomStringGenerator;
+        private readonly IRandomStringGenerator _randomStringGenerator;
 
         public GeneratePasswordController(IRandomStringGenerator randomStringGenerator)
         {

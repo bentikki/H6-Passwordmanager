@@ -46,6 +46,16 @@ namespace PasswordClassLibrary.Logging
             loggerChain = fileLogger;
         }
 
+        /// <summary>
+        /// Add a new logging method to chain.
+        /// This will be run according to its set IncidentLevel.
+        /// </summary>
+        /// <param name="loggingMethod">Logging method to add to loggingchain.</param>
+        public static void AddLogger(LoggingMaster loggingMethod)
+        {
+            loggerChain.Next(loggingMethod);
+        }
+
 
     }
 }

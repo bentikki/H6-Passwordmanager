@@ -7,7 +7,7 @@ namespace PasswordManagerAPI.Models.GeneratePassword
 {
     public class GeneratePasswordResponse
     {
-        public string GeneratedPassword { get; set; }
+        public string GeneratedPassword { get; private set; }
 
         public GeneratePasswordResponse(string generatedPassword)
         {

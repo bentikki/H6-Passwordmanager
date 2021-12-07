@@ -8,10 +8,10 @@ namespace PasswordClassLibrary.RandomStringGenerating
 {
     public class RandomStringRuleset
     {
-        public bool IncludeCharacters { get; set; }
-        public bool IncludeNumbers { get; set; }
-        public bool IncludeSpecialchars { get; set; }
-        public int StringSize { get; set; }
+        public bool IncludeCharacters { get; private set; }
+        public bool IncludeNumbers { get; private set; }
+        public bool IncludeSpecialchars { get; private set; }
+        public int StringSize { get; private set; }
 
         public RandomStringRuleset(int stringSize) : this(stringSize, true, true, true) { }
 

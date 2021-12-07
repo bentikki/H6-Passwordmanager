@@ -79,13 +79,6 @@ namespace PasswordManagerAPI.Services
             // Validate input
             Validator.ValidateAndThrow("UserID", tokenClaimId);
 
-            //if (tokenClaimId == null || string.IsNullOrEmpty(tokenClaimId) || string.IsNullOrWhiteSpace(tokenClaimId)) throw new ArgumentException("Invalid claim id", nameof(tokenClaimId));
-
-            //long tokenClaimIdInt = 0;
-            //bool tokenClaimIsInt = long.TryParse(tokenClaimId, out tokenClaimIdInt);
-            //if(!tokenClaimIsInt || tokenClaimIdInt < 0) throw new ArgumentException("Token claim must be numeric and a valid user id.", nameof(tokenClaimId));
-
-
             // Create a new token set containing refreshtoken and access token.
             string accessToken = this._accessTokenHandler.GenerateToken(tokenClaimId);
             IRefreshToken refreshToken = this._refreshTokenHandler.GenerateRefreshToken();

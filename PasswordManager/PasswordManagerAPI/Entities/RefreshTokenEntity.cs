@@ -24,9 +24,9 @@ namespace PasswordManagerAPI.Entities
         // Write(false) is set to indicate that the field should not be used by the database mapper.
         [Write(false)]
         public bool IsExpired => DateTime.UtcNow >= Expires;
-        [Write(false)]
-        public bool IsRevoked => Revoked != null;
-        [Write(false)]
-        public bool IsActive => !IsRevoked && !IsExpired;
+        //[Write(false)]
+        //public bool IsRevoked => Revoked != null;
+        //[Write(false)]
+        //public bool IsActive => !IsRevoked && !IsExpired;
     }
 }

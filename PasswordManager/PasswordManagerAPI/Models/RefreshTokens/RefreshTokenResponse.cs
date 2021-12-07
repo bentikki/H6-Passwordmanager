@@ -9,10 +9,10 @@ namespace PasswordManagerAPI.Models.RefreshTokens
 {
     public class RefreshTokenResponse
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
+        public int Id { get; private set; }
+        public string Username { get; private set; }
 
-        public AccessRefreshTokenSet TokenSet { get; }
+        public AccessRefreshTokenSet TokenSet { get; private set; }
 
         public RefreshTokenResponse(AccessRefreshTokenSet tokenSet, IUser user)
         {
