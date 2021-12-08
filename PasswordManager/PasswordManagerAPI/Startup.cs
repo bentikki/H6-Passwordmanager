@@ -121,7 +121,7 @@ namespace PasswordManagerAPI
                 {
                     new NoNullRule(),
                     new NoEmptyStringRule(),
-                    new MinLengthRule(40),
+                    new MinLengthRule(20),
                     new MaxLengthRule(100)
                 }
             ));

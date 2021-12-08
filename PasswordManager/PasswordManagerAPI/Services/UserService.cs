@@ -45,23 +45,6 @@ namespace PasswordManagerAPI.Services
             Validator.ValidateAndThrow("Mail", createUserRequest.Username);
             Validator.ValidateAndThrow("Password", createUserRequest.Password);
 
-            ////if (string.IsNullOrEmpty(createUserRequest.Username)) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be null.");
-            //if (string.IsNullOrEmpty(createUserRequest.Password)) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be null.");
-            //if (createUserRequest.Password.Length > 128) throw new ArgumentNullException(nameof(createUserRequest.Password), "Password must not be longer than 128 characters.");
-            //if (createUserRequest.Username.Length > 100) throw new ArgumentNullException(nameof(createUserRequest.Username), "Username must not be longer than 100 characters.");
-
-            //// Mail validation
-            //MailAddress mail;
-            //try
-            //{
-            //    mail = new MailAddress(createUserRequest.Username);
-                
-            //}catch(Exception e)
-            //{
-            //    throw new ArgumentException(e.Message, nameof(createUserRequest.Username));
-            //}
-            //if (mail.Host != "zbc.dk") throw new ArgumentException("The mail must be @ZBC.dk domain", nameof(createUserRequest.Username));
-
             // Check if an user with the provided username already exists - throw an exception if it does.
             IUser existingUser = await this.GetUserByUsernameAsync(createUserRequest.Username);
             if(existingUser != null)

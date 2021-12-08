@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PasswordClassLibrary.Validation
@@ -12,7 +13,7 @@ namespace PasswordClassLibrary.Validation
     /// </summary>
     public static class Validator
     {
-        static Object thisLock = new Object();
+        static ReaderWriterLockSlim lock_ = new ReaderWriterLockSlim();
         static private List<ValidationRuleSet> validationRuleSets = new List<ValidationRuleSet>();
 
         /// <summary>
@@ -22,14 +23,19 @@ namespace PasswordClassLibrary.Validation
         static public void AddRuleSet(ValidationRuleSet validationRuleSet)
         {
             // If the ruleset allready exists - replace it.
-            lock (thisLock)
+            try
             {
+                lock_.EnterWriteLock();
                 ValidationRuleSet validationRuleSetToReplace = validationRuleSets.SingleOrDefault(x => x.Name == validationRuleSet.Name);
 
                 if (validationRuleSetToReplace != null)
                 {
                     validationRuleSets.RemoveAll(x => x.Name == validationRuleSet.Name);
                 }
+            }
+            finally
+            {
+                lock_.ExitWriteLock();
             }
 
             // Add the new ruleset to the validator.

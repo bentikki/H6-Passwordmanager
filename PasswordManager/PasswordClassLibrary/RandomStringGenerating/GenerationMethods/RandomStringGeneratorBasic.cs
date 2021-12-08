@@ -23,7 +23,7 @@ namespace PasswordClassLibrary.RandomStringGenerating.GenerationMethods
             {
                 if (stringRuleSet.IncludeCharacters) allowedChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                 if (stringRuleSet.IncludeNumbers) allowedChars += "0123456789";
-                if (stringRuleSet.IncludeSpecialchars) allowedChars += "-~()'!*:@;";
+                if (stringRuleSet.IncludeSpecialchars) allowedChars += "-~()'!*@;";
             }
 
             for (int i = 0; i < stringRuleSet.StringSize; i++)
